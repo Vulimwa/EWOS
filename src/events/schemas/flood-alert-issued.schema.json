@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ewos://events/FloodAlertIssued/1.0.0",
+  "title": "FloodAlertIssued",
+  "description": "Emitted by a flood module when a gauge crosses warning/danger thresholds or a forecast indicates imminent flooding.",
+  "type": "object",
+  "required": ["gauge_id", "river", "level_m", "warning_level_m", "danger_level_m", "trend"],
+  "properties": {
+    "gauge_id": { "type": "string", "format": "uuid" },
+    "gauge_name": { "type": "string" },
+    "river": { "type": "string" },
+    "level_m": { "type": "number" },
+    "warning_level_m": { "type": "number" },
+    "danger_level_m": { "type": "number" },
+    "trend": { "type": "string", "enum": ["rising", "steady", "falling"] },
+    "affected_population_estimate": { "type": "integer", "minimum": 0 },
+    "recommended_actions": { "type": "array", "items": { "type": "string" } }
+  },
+  "x-envelope": {
+    "topic": "FloodAlertIssued",
+    "severity_mapping": "level>=danger → emergency; level>=warning → warning; level>=0.85*warning → watch; else advisory",
+    "geometry": "GeoJSON Polygon of estimated inundation extent (events.geom_geojson)"
+  }
+}
