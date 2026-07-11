@@ -1,0 +1,67 @@
+{
+  "name": "EWOS — Early Warning Operating System",
+  "version": "0.1.0",
+  "phase": 1,
+  "phase_name": "Platform Foundation",
+  "sprint_number": 1,
+  "last_checkpoint_timestamp": "2026-07-11T00:00:00Z",
+  "auto_proceed_flag": false,
+  "platform_notes": "Runs on Lovable (TanStack Start + Lovable Cloud). Monorepo packages from the BRD map to in-repo folders: app-web=src/routes+components, ui-lib=src/components/ewos, plugin-sdk=src/sdk, backend-api=server functions + api routes, data=Cloud migrations, docs=docs/.",
+  "design_tokens": "src/design/tokens.json (source of truth mirrored in src/styles.css)",
+  "db_schema_version": "1.0.0",
+  "event_schema_version": "1.0.0",
+  "event_topics": [
+    { "topic": "FloodAlertIssued", "schema": "src/events/schemas/flood-alert-issued.schema.json", "version": "1.0.0", "status": "implemented" },
+    { "topic": "VegetationStressHigh", "schema": "src/events/schemas/vegetation-stress-high.schema.json", "version": "1.0.0", "status": "schema-only" },
+    { "topic": "WildfireRiskUpdate", "schema": null, "version": "0.0.0", "status": "planned-sprint-3" },
+    { "topic": "CommunityReportSubmitted", "schema": null, "version": "0.0.0", "status": "planned-sprint-4" }
+  ],
+  "api_contracts": [
+    { "id": "openapi-partial", "path": "docs/api/openapi.json", "covers": ["auth", "organizations", "modules", "events", "notifications", "ai-assistant"] }
+  ],
+  "backlog": [
+    { "id": "EWOS-1", "title": "Project manifest + checkpoint mechanism", "priority": "P0", "estimate": "S", "sprint": 1, "status": "done", "acceptance_criteria": "project_manifest.json exists at repo root; docs/CONTRIBUTING.md documents update rules; every AI run reads and appends to it." },
+    { "id": "EWOS-2", "title": "Design system + tokens (dark ops console)", "priority": "P0", "estimate": "M", "sprint": 1, "status": "done", "acceptance_criteria": "All colors defined as oklch semantic tokens incl. 4-level hazard severity scale; no hardcoded color classes in components; tokens exported to src/design/tokens.json." },
+    { "id": "EWOS-3", "title": "Workspace shell (3-column, map-first)", "priority": "P0", "estimate": "L", "sprint": 1, "status": "done", "acceptance_criteria": "Collapsible left nav, MapLibre center canvas, resizable right contextual panel, top bar with search, bottom operations dock; keyboard shortcuts [ ] and Cmd/Ctrl+K." },
+    { "id": "EWOS-4", "title": "GIS engine v0 (MapLibre + OSM)", "priority": "P0", "estimate": "M", "sprint": 1, "status": "done", "acceptance_criteria": "Dark basemap + satellite toggle, layer visibility + opacity controls, GeoJSON hazard polygons, gauge markers, admin boundaries." },
+    { "id": "EWOS-5", "title": "Database schema v1 (PostGIS, org-scoped)", "priority": "P0", "estimate": "M", "sprint": 1, "status": "done", "acceptance_criteria": "organizations, user_roles, modules, module_installs, events (GIST index), notifications, river_gauges, gauge_readings, admin_boundaries; RLS on all tables; seed data for demo org." },
+    { "id": "EWOS-6", "title": "Event bus v1 + canonical envelope", "priority": "P0", "estimate": "M", "sprint": 1, "status": "done", "acceptance_criteria": "events table with topic + semver schema_version; realtime feed to UI; JSON Schemas for FloodAlertIssued and VegetationStressHigh." },
+    { "id": "EWOS-7", "title": "Plugin SDK skeleton", "priority": "P1", "estimate": "M", "sprint": 1, "status": "done", "acceptance_criteria": "defineHazardApp() with lifecycle hooks, panel + map layer registration, event publish/subscribe types; documented in docs/sdk.md." },
+    { "id": "EWOS-8", "title": "Flood Module (canonical HazardApp)", "priority": "P0", "estimate": "L", "sprint": 1, "status": "done", "acceptance_criteria": "Registered via SDK; gauge panel with live readings; server-side risk scan ingests a reading, classifies severity, publishes FloodAlertIssued with GeoJSON polygon; alert appears in feed + map." },
+    { "id": "EWOS-9", "title": "AI Decision Assistant v0", "priority": "P1", "estimate": "M", "sprint": 1, "status": "done", "acceptance_criteria": "Floating action button opens chat panel; Explain/Act mode toggle; streaming responses via Lovable AI; server-side prompt includes org + live event context." },
+    { "id": "EWOS-10", "title": "Capability Store v0", "priority": "P1", "estimate": "S", "sprint": 1, "status": "done", "acceptance_criteria": "/store lists modules from DB with version, publisher, permissions, privacy classification, install state." },
+    { "id": "EWOS-11", "title": "Organization Manager UI + auth (login, org roles)", "priority": "P0", "estimate": "L", "sprint": 2, "status": "todo", "acceptance_criteria": "Email+Google sign-in; org switcher functional; role-gated module management; RLS tightened (remove demo anon write policies)." },
+    { "id": "EWOS-12", "title": "Notification channels (in-app feed + WhatsApp/SMS adapters stubbed)", "priority": "P1", "estimate": "M", "sprint": 2, "status": "todo", "acceptance_criteria": "Notification engine dispatch table; channel adapter interface; in-app delivery working; WhatsApp/SMS behind secrets." },
+    { "id": "EWOS-13", "title": "Timeline slider for time-series hazard layers", "priority": "P2", "estimate": "M", "sprint": 2, "status": "todo", "acceptance_criteria": "Scrub events/readings over time on map." },
+    { "id": "EWOS-14", "title": "Geofencing + polygon drawing tools", "priority": "P2", "estimate": "M", "sprint": 3, "status": "todo", "acceptance_criteria": "Draw/edit polygons, save as boundaries, use as alert geofences." },
+    { "id": "EWOS-15", "title": "Event chain demo: DroughtIndex→VegetationStressHigh→WildfireRiskUpdate→AgricultureImpact→CommunityAlert", "priority": "P1", "estimate": "L", "sprint": 3, "status": "todo", "acceptance_criteria": "Chained subscriptions produce downstream events visible in feed with lineage." },
+    { "id": "EWOS-16", "title": "PNG/PDF situation report export", "priority": "P2", "estimate": "M", "sprint": 3, "status": "todo", "acceptance_criteria": "Export current map + alert summary." },
+    { "id": "EWOS-17", "title": "AI Act mode: prefilled report templates + recommended actions execution", "priority": "P1", "estimate": "L", "sprint": 4, "status": "todo", "acceptance_criteria": "Assistant can open prefilled alert drafts and trigger notification requests with human confirmation." },
+    { "id": "EWOS-18", "title": "Marketplace publishing flow + HazardApp author checklist", "priority": "P2", "estimate": "L", "sprint": 4, "status": "todo", "acceptance_criteria": "Module submission metadata, permission review, QA checklist per docs/sdk.md." }
+  ],
+  "completed_tasks": [
+    { "id": "EWOS-1", "completed_at": "2026-07-11" },
+    { "id": "EWOS-2", "completed_at": "2026-07-11" },
+    { "id": "EWOS-3", "completed_at": "2026-07-11" },
+    { "id": "EWOS-4", "completed_at": "2026-07-11" },
+    { "id": "EWOS-5", "completed_at": "2026-07-11" },
+    { "id": "EWOS-6", "completed_at": "2026-07-11" },
+    { "id": "EWOS-7", "completed_at": "2026-07-11" },
+    { "id": "EWOS-8", "completed_at": "2026-07-11" },
+    { "id": "EWOS-9", "completed_at": "2026-07-11" },
+    { "id": "EWOS-10", "completed_at": "2026-07-11" }
+  ],
+  "open_issues": [
+    { "id": "ISSUE-1", "severity": "medium", "note": "Demo phase: events/gauge_readings/notifications allow anonymous inserts scoped to the demo org so the Flood pipeline works pre-auth. Must be removed in Sprint 2 (EWOS-11) when auth lands." },
+    { "id": "ISSUE-2", "severity": "low", "note": "DB linter flags PostGIS system objects (spatial_ref_sys RLS, extension in public, PostGIS SECURITY DEFINER fns). Inherent to PostGIS; revisit before production." }
+  ],
+  "roadmap": {
+    "phase_1": "Platform Foundation (Sprints 1-2): shell, design system, schema, event bus, SDK, Flood Module, auth + org manager",
+    "phase_2": "GIS + Notifications depth (Sprint 3): drawing tools, timeline, exports, channel adapters",
+    "phase_3": "Interoperability (Sprint 3-4): event chain flows, module lineage",
+    "phase_4": "AI Orchestration (Sprint 4-5): Act mode, decision playbooks, AI-generated sitreps",
+    "phase_5": "Marketplace GA: third-party publishing, review pipeline",
+    "phase_6": "Mobile shell + offline field mode",
+    "phase_7": "Federation: cross-org event sharing, regional early-warning mesh"
+  }
+}

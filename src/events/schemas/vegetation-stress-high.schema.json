@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ewos://events/VegetationStressHigh/1.0.0",
+  "title": "VegetationStressHigh",
+  "description": "Emitted by drought/agromet modules when a vegetation index anomaly crosses its stress threshold over a region.",
+  "type": "object",
+  "required": ["index", "value", "threshold", "region_name", "window_days"],
+  "properties": {
+    "index": { "type": "string", "enum": ["NDVI_anomaly", "SPI", "VHI"] },
+    "value": { "type": "number" },
+    "threshold": { "type": "number" },
+    "region_name": { "type": "string" },
+    "window_days": { "type": "integer", "minimum": 1 }
+  },
+  "x-envelope": {
+    "topic": "VegetationStressHigh",
+    "downstream_subscribers": ["wildfire-risk", "agriculture-impact"],
+    "geometry": "GeoJSON Polygon of stressed region (events.geom_geojson)"
+  }
+}

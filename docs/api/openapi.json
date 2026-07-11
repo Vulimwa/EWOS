@@ -1,0 +1,34 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "EWOS Platform API (contract stubs)", "version": "0.1.0", "description": "Partial contracts for Phase 1. Implemented as typed server functions + Data API; this document is the language-neutral contract." },
+  "paths": {
+    "/auth/session": { "get": { "tags": ["auth"], "summary": "Current session", "responses": { "200": { "description": "Session with user id, org memberships, roles" } } } },
+    "/organizations": { "get": { "tags": ["organizations"], "summary": "List organizations visible to caller", "responses": { "200": { "description": "Org list with slug, name, map defaults" } } } },
+    "/organizations/{orgId}/modules": { "get": { "tags": ["modules"], "summary": "Installed modules for an org", "parameters": [{ "name": "orgId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Module installs with enabled flag" } } } },
+    "/modules": { "get": { "tags": ["modules"], "summary": "Capability Store catalog", "responses": { "200": { "description": "Published modules with version, permissions, privacy classification" } } } },
+    "/events": {
+      "get": { "tags": ["events"], "summary": "Query events (org-scoped, topic/severity/time filters)", "responses": { "200": { "description": "Event envelopes" } } },
+      "post": { "tags": ["events"], "summary": "Publish an event", "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventEnvelope" } } } }, "responses": { "201": { "description": "Created" } } }
+    },
+    "/notifications": { "post": { "tags": ["notifications"], "summary": "Request a notification dispatch (in-app | whatsapp | sms)", "responses": { "202": { "description": "Queued" } } } },
+    "/ai/chat": { "post": { "tags": ["ai"], "summary": "Streaming decision-assistant chat (SSE)", "description": "Implemented at /api/chat. Body: { messages, mode: explain|act, scope }", "responses": { "200": { "description": "UI message stream" } } } }
+  },
+  "components": {
+    "schemas": {
+      "EventEnvelope": {
+        "type": "object",
+        "required": ["org_id", "topic", "schema_version", "severity", "payload", "source_module"],
+        "properties": {
+          "org_id": { "type": "string", "format": "uuid" },
+          "topic": { "type": "string", "examples": ["FloodAlertIssued"] },
+          "schema_version": { "type": "string", "examples": ["1.0.0"] },
+          "severity": { "type": "string", "enum": ["advisory", "watch", "warning", "emergency"] },
+          "payload": { "type": "object" },
+          "geom_geojson": { "type": "object", "description": "GeoJSON geometry (WGS84)" },
+          "source_module": { "type": "string" },
+          "occurred_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}
