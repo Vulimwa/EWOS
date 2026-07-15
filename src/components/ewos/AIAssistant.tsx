@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { Loader2, Send, Sparkles, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -113,7 +113,7 @@ export function AIAssistant({ open, onOpenChange }: AIAssistantProps) {
                 </button>
               </div>
             )}
-            {messages.map((message) => (
+            {messages.map((message: UIMessage) => (
               <div
                 key={message.id}
                 className={cn(
@@ -123,7 +123,7 @@ export function AIAssistant({ open, onOpenChange }: AIAssistantProps) {
                     : "bg-secondary text-secondary-foreground",
                 )}
               >
-                {message.parts.map((part, i) =>
+                {message.parts.map((part: UIMessage["parts"][number], i: number) =>
                   part.type === "text" ? (
                     <p key={i} className="whitespace-pre-wrap">
                       {part.text}

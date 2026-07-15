@@ -72,7 +72,7 @@ export const Route = createFileRoute("/api/chat")({
           headers: getLovableAiGatewayResponseHeaders(undefined, {
             ...(initialRunId ? { [LOVABLE_AIG_RUN_ID_HEADER]: initialRunId } : {}),
           }),
-          onError: (error) => {
+          onError: (error: unknown) => {
             const message = error instanceof Error ? error.message : String(error);
             if (message.includes("429")) return "Rate limit reached — please retry in a moment.";
             if (message.includes("402")) return "AI credits exhausted — add credits in workspace settings.";
