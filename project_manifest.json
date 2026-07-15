@@ -4,7 +4,7 @@
   "phase": 1,
   "phase_name": "Platform Foundation",
   "sprint_number": 1,
-  "last_checkpoint_timestamp": "2026-07-11T00:00:00Z",
+  "last_checkpoint_timestamp": "2026-07-15T00:00:00Z",
   "auto_proceed_flag": false,
   "platform_notes": "Runs on Lovable (TanStack Start + Lovable Cloud). Monorepo packages from the BRD map to in-repo folders: app-web=src/routes+components, ui-lib=src/components/ewos, plugin-sdk=src/sdk, backend-api=server functions + api routes, data=Cloud migrations, docs=docs/.",
   "design_tokens": "src/design/tokens.json (source of truth mirrored in src/styles.css)",
@@ -30,7 +30,7 @@
     { "id": "EWOS-8", "title": "Flood Module (canonical HazardApp)", "priority": "P0", "estimate": "L", "sprint": 1, "status": "done", "acceptance_criteria": "Registered via SDK; gauge panel with live readings; server-side risk scan ingests a reading, classifies severity, publishes FloodAlertIssued with GeoJSON polygon; alert appears in feed + map." },
     { "id": "EWOS-9", "title": "AI Decision Assistant v0", "priority": "P1", "estimate": "M", "sprint": 1, "status": "done", "acceptance_criteria": "Floating action button opens chat panel; Explain/Act mode toggle; streaming responses via Lovable AI; server-side prompt includes org + live event context." },
     { "id": "EWOS-10", "title": "Capability Store v0", "priority": "P1", "estimate": "S", "sprint": 1, "status": "done", "acceptance_criteria": "/store lists modules from DB with version, publisher, permissions, privacy classification, install state." },
-    { "id": "EWOS-11", "title": "Organization Manager UI + auth (login, org roles)", "priority": "P0", "estimate": "L", "sprint": 2, "status": "todo", "acceptance_criteria": "Email+Google sign-in; org switcher functional; role-gated module management; RLS tightened (remove demo anon write policies)." },
+    { "id": "EWOS-11", "title": "Organization Manager UI + auth (login, org roles)", "priority": "P0", "estimate": "L", "sprint": 2, "status": "in-progress", "acceptance_criteria": "Email+Google sign-in; org switcher functional; role-gated module management; RLS tightened (remove demo anon write policies).", "progress": "Email + Google sign-in live at /auth; AuthGate wraps workspace and store; new sign-ups auto-provisioned into Demo Org as viewer via handle_new_user trigger; profiles table added; demo anon INSERT policies replaced with org-member scoped policies on events/notifications/gauge_readings. Remaining: role-gated module install UI + multi-org switcher UX." },
     { "id": "EWOS-12", "title": "Notification channels (in-app feed + WhatsApp/SMS adapters stubbed)", "priority": "P1", "estimate": "M", "sprint": 2, "status": "todo", "acceptance_criteria": "Notification engine dispatch table; channel adapter interface; in-app delivery working; WhatsApp/SMS behind secrets." },
     { "id": "EWOS-13", "title": "Timeline slider for time-series hazard layers", "priority": "P2", "estimate": "M", "sprint": 2, "status": "todo", "acceptance_criteria": "Scrub events/readings over time on map." },
     { "id": "EWOS-14", "title": "Geofencing + polygon drawing tools", "priority": "P2", "estimate": "M", "sprint": 3, "status": "todo", "acceptance_criteria": "Draw/edit polygons, save as boundaries, use as alert geofences." },
@@ -52,7 +52,7 @@
     { "id": "EWOS-10", "completed_at": "2026-07-11" }
   ],
   "open_issues": [
-    { "id": "ISSUE-1", "severity": "medium", "note": "Demo phase: events/gauge_readings/notifications allow anonymous inserts scoped to the demo org so the Flood pipeline works pre-auth. Must be removed in Sprint 2 (EWOS-11) when auth lands." },
+    { "id": "ISSUE-1", "severity": "resolved", "note": "Resolved 2026-07-15: anon INSERT policies on events/gauge_readings/notifications dropped; writes now require an authenticated org member (is_org_member)." },
     { "id": "ISSUE-2", "severity": "low", "note": "DB linter flags PostGIS system objects (spatial_ref_sys RLS, extension in public, PostGIS SECURITY DEFINER fns). Inherent to PostGIS; revisit before production." }
   ],
   "roadmap": {

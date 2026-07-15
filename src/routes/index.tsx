@@ -13,12 +13,21 @@ import { AIAssistant } from "@/components/ewos/AIAssistant";
 import { getHazardApp } from "@/sdk";
 import { runFloodRiskScan } from "@/lib/flood.functions";
 import { useBoundaries, useEvents, useGauges, useOrg } from "@/lib/ewos-queries";
+import { AuthGate } from "@/components/ewos/AuthGate";
 
 export const Route = createFileRoute("/")({
-  component: Workspace,
+  component: WorkspaceRoute,
 });
 
 const SEARCH_INPUT_ID = "ewos-global-search";
+
+function WorkspaceRoute() {
+  return (
+    <AuthGate>
+      <Workspace />
+    </AuthGate>
+  );
+}
 
 function Workspace() {
   const { data: org } = useOrg();

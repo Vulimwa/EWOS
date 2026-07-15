@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Check, Flame, ShieldCheck, Sun, Users, Waves, type LucideIcon } from "lucide-react";
 import { useModuleInstalls, useModulesCatalog, useOrg } from "@/lib/ewos-queries";
+import { AuthGate } from "@/components/ewos/AuthGate";
 
 export const Route = createFileRoute("/store")({
   head: () => ({
@@ -11,7 +12,11 @@ export const Route = createFileRoute("/store")({
       { property: "og:description", content: "Plug-and-play hazard modules for the EWOS early-warning workspace." },
     ],
   }),
-  component: StorePage,
+  component: () => (
+    <AuthGate>
+      <StorePage />
+    </AuthGate>
+  ),
 });
 
 const iconMap: Record<string, LucideIcon> = { waves: Waves, sun: Sun, flame: Flame, users: Users };
