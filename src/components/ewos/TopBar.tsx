@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Bell, PanelLeft, Radar, Search, Store, UserCircle2 } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Bell, LogOut, PanelLeft, Radar, Search, Store, UserCircle2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useNotifications } from "@/lib/ewos-queries";
+import { signOut, useAuth } from "@/hooks/use-auth";
 
 interface TopBarProps {
   orgName: string | undefined;
@@ -15,7 +16,13 @@ interface TopBarProps {
 export function TopBar({ orgName, orgId, onToggleNav, searchInputId }: TopBarProps) {
   const { data: notifications } = useNotifications(orgId);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
   const bellRef = useRef<HTMLButtonElement>(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const initial = (user?.user_metadata?.full_name as string | undefined)?.[0]
+    ?? user?.email?.[0]
+    ?? "?";
 
   return (
     <header className="relative z-30 flex h-12 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-2">
@@ -104,15 +111,62 @@ export function TopBar({ orgName, orgId, onToggleNav, searchInputId }: TopBarPro
           )}
         </div>
 
-        <button
-          aria-label="User menu (sign-in arrives in Sprint 2)"
-          className={cn(
-            "rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground",
+        <div className="relative">
+          <button
+            onClick={() => setUserOpen((v) => !v)}
+            aria-label="User menu"
+            aria-expanded={userOpen}
+            className={cn(
+              "flex items-center gap-1.5 rounded-md p-1 text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground",
+            )}
+          >
+            {user ? (
+              <span className="flex size-6 items-center justify-center rounded-full bg-primary text-[10px] font-semibold uppercase text-primary-foreground">
+                {initial}
+              </span>
+            ) : (
+              <UserCircle2 className="size-5" />
+            )}
+          </button>
+          {userOpen && (
+            <div
+              role="menu"
+              className="overlay-elevated absolute right-0 top-10 w-64 rounded-lg p-1"
+              onMouseLeave={() => setUserOpen(false)}
+            >
+              {user ? (
+                <>
+                  <div className="px-2 py-1.5">
+                    <p className="truncate text-xs font-medium text-foreground">
+                      {(user.user_metadata?.full_name as string | undefined) ?? user.email}
+                    </p>
+                    <p className="truncate text-[10px] text-muted-foreground">{user.email}</p>
+                  </div>
+                  <div className="my-1 h-px bg-border" />
+                  <button
+                    onClick={async () => {
+                      await signOut();
+                      setUserOpen(false);
+                      void navigate({ to: "/auth" });
+                    }}
+                    className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs text-foreground hover:bg-accent"
+                  >
+                    <LogOut className="size-3.5" />
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setUserOpen(false)}
+                  className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs text-foreground hover:bg-accent"
+                >
+                  Sign in
+                </Link>
+              )}
+            </div>
           )}
-          title="Sign-in arrives in Sprint 2"
-        >
-          <UserCircle2 className="size-5" />
-        </button>
+        </div>
       </nav>
     </header>
   );
