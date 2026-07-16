@@ -24,8 +24,8 @@ function PortalDashboard() {
   const openIncidents = (incidents ?? []).filter((i) => i.status === "open").length;
 
   const kpis = [
-    { label: "Active hazards", value: activeHazards, icon: Activity, tone: "text-hazard-warning" },
-    { label: "Open incidents", value: openIncidents, icon: Siren, tone: "text-hazard-emergency" },
+    { label: "Active hazards", value: activeHazards, icon: Activity, tone: "text-severity-warning" },
+    { label: "Open incidents", value: openIncidents, icon: Siren, tone: "text-severity-emergency" },
     { label: "Command Centers", value: centers?.length ?? 0, icon: Network, tone: "text-primary" },
     { label: "Installed apps", value: installs?.length ?? 0, icon: Package, tone: "text-primary" },
     { label: "Assets tracked", value: assets?.length ?? 0, icon: Boxes, tone: "text-muted-foreground" },
