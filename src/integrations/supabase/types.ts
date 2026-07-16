@@ -52,6 +52,119 @@ export type Database = {
           },
         ]
       }
+      assets: {
+        Row: {
+          address: string | null
+          asset_type: string
+          capacity: number | null
+          created_at: string
+          created_by: string | null
+          geom: unknown
+          id: string
+          metadata: Json
+          name: string
+          org_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          asset_type: string
+          capacity?: number | null
+          created_at?: string
+          created_by?: string | null
+          geom?: unknown
+          id?: string
+          metadata?: Json
+          name: string
+          org_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          asset_type?: string
+          capacity?: number | null
+          created_at?: string
+          created_by?: string | null
+          geom?: unknown
+          id?: string
+          metadata?: Json
+          name?: string
+          org_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assets_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      command_centers: {
+        Row: {
+          color: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          org_id: string
+          parent_id: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          org_id: string
+          parent_id?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          parent_id?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "command_centers_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "command_centers_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "command_centers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           created_at: string
@@ -131,8 +244,92 @@ export type Database = {
           },
         ]
       }
+      incidents: {
+        Row: {
+          assignee_id: string | null
+          category: string
+          closed_at: string | null
+          command_center_id: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          event_id: string | null
+          geom: unknown
+          id: string
+          location_name: string | null
+          opened_at: string
+          org_id: string
+          severity: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          category?: string
+          closed_at?: string | null
+          command_center_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          event_id?: string | null
+          geom?: unknown
+          id?: string
+          location_name?: string | null
+          opened_at?: string
+          org_id: string
+          severity?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assignee_id?: string | null
+          category?: string
+          closed_at?: string | null
+          command_center_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          event_id?: string | null
+          geom?: unknown
+          id?: string
+          location_name?: string | null
+          opened_at?: string
+          org_id?: string
+          severity?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "incidents_command_center_id_fkey"
+            columns: ["command_center_id"]
+            isOneToOne: false
+            referencedRelation: "command_centers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "incidents_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "incidents_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       module_installs: {
         Row: {
+          command_center_id: string | null
+          config: Json
           enabled: boolean
           id: string
           installed_at: string
@@ -140,6 +337,8 @@ export type Database = {
           org_id: string
         }
         Insert: {
+          command_center_id?: string | null
+          config?: Json
           enabled?: boolean
           id?: string
           installed_at?: string
@@ -147,6 +346,8 @@ export type Database = {
           org_id: string
         }
         Update: {
+          command_center_id?: string | null
+          config?: Json
           enabled?: boolean
           id?: string
           installed_at?: string
@@ -154,6 +355,13 @@ export type Database = {
           org_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "module_installs_command_center_id_fkey"
+            columns: ["command_center_id"]
+            isOneToOne: false
+            referencedRelation: "command_centers"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "module_installs_module_id_fkey"
             columns: ["module_id"]
