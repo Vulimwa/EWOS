@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BellRing } from "lucide-react";
 import { useOrg, useNotifications } from "@/lib/ewos-queries";
-import { SeverityBadge } from "@/components/ewos/SeverityBadge";
 
 export const Route = createFileRoute("/portal/notifications")({
   component: NotificationsPage,
@@ -24,9 +23,9 @@ function NotificationsPage() {
               <BellRing className="mt-0.5 size-4 text-primary" />
               <div className="min-w-0 flex-1">
                 <p className="truncate font-medium">{n.title}</p>
-                <p className="mt-0.5 text-xs text-muted-foreground">{n.body}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{n.message}</p>
               </div>
-              {n.severity && <SeverityBadge severity={n.severity} />}
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{n.channel}</span>
             </li>
           ))}
           {!(notifs ?? []).length && (

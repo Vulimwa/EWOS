@@ -14,9 +14,14 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as PortalRouteRouteImport } from './routes/portal/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal/index'
+import { Route as PortalUsersRouteImport } from './routes/portal/users'
+import { Route as PortalReportsRouteImport } from './routes/portal/reports'
+import { Route as PortalNotificationsRouteImport } from './routes/portal/notifications'
 import { Route as PortalIncidentsRouteImport } from './routes/portal/incidents'
 import { Route as PortalHierarchyRouteImport } from './routes/portal/hierarchy'
+import { Route as PortalAssistantRouteImport } from './routes/portal/assistant'
 import { Route as PortalAssetsRouteImport } from './routes/portal/assets'
+import { Route as PortalAnalyticsRouteImport } from './routes/portal/analytics'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const StoreRoute = StoreRouteImport.update({
@@ -44,6 +49,21 @@ const PortalIndexRoute = PortalIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PortalRouteRoute,
 } as any)
+const PortalUsersRoute = PortalUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => PortalRouteRoute,
+} as any)
+const PortalReportsRoute = PortalReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => PortalRouteRoute,
+} as any)
+const PortalNotificationsRoute = PortalNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => PortalRouteRoute,
+} as any)
 const PortalIncidentsRoute = PortalIncidentsRouteImport.update({
   id: '/incidents',
   path: '/incidents',
@@ -54,9 +74,19 @@ const PortalHierarchyRoute = PortalHierarchyRouteImport.update({
   path: '/hierarchy',
   getParentRoute: () => PortalRouteRoute,
 } as any)
+const PortalAssistantRoute = PortalAssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => PortalRouteRoute,
+} as any)
 const PortalAssetsRoute = PortalAssetsRouteImport.update({
   id: '/assets',
   path: '/assets',
+  getParentRoute: () => PortalRouteRoute,
+} as any)
+const PortalAnalyticsRoute = PortalAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
   getParentRoute: () => PortalRouteRoute,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
@@ -71,9 +101,14 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
+  '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
+  '/portal/assistant': typeof PortalAssistantRoute
   '/portal/hierarchy': typeof PortalHierarchyRoute
   '/portal/incidents': typeof PortalIncidentsRoute
+  '/portal/notifications': typeof PortalNotificationsRoute
+  '/portal/reports': typeof PortalReportsRoute
+  '/portal/users': typeof PortalUsersRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRoutesByTo {
@@ -81,9 +116,14 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
+  '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
+  '/portal/assistant': typeof PortalAssistantRoute
   '/portal/hierarchy': typeof PortalHierarchyRoute
   '/portal/incidents': typeof PortalIncidentsRoute
+  '/portal/notifications': typeof PortalNotificationsRoute
+  '/portal/reports': typeof PortalReportsRoute
+  '/portal/users': typeof PortalUsersRoute
   '/portal': typeof PortalIndexRoute
 }
 export interface FileRoutesById {
@@ -93,9 +133,14 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
+  '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
+  '/portal/assistant': typeof PortalAssistantRoute
   '/portal/hierarchy': typeof PortalHierarchyRoute
   '/portal/incidents': typeof PortalIncidentsRoute
+  '/portal/notifications': typeof PortalNotificationsRoute
+  '/portal/reports': typeof PortalReportsRoute
+  '/portal/users': typeof PortalUsersRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRouteTypes {
@@ -106,9 +151,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/store'
     | '/api/chat'
+    | '/portal/analytics'
     | '/portal/assets'
+    | '/portal/assistant'
     | '/portal/hierarchy'
     | '/portal/incidents'
+    | '/portal/notifications'
+    | '/portal/reports'
+    | '/portal/users'
     | '/portal/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -116,9 +166,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/store'
     | '/api/chat'
+    | '/portal/analytics'
     | '/portal/assets'
+    | '/portal/assistant'
     | '/portal/hierarchy'
     | '/portal/incidents'
+    | '/portal/notifications'
+    | '/portal/reports'
+    | '/portal/users'
     | '/portal'
   id:
     | '__root__'
@@ -127,9 +182,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/store'
     | '/api/chat'
+    | '/portal/analytics'
     | '/portal/assets'
+    | '/portal/assistant'
     | '/portal/hierarchy'
     | '/portal/incidents'
+    | '/portal/notifications'
+    | '/portal/reports'
+    | '/portal/users'
     | '/portal/'
   fileRoutesById: FileRoutesById
 }
@@ -178,6 +238,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalIndexRouteImport
       parentRoute: typeof PortalRouteRoute
     }
+    '/portal/users': {
+      id: '/portal/users'
+      path: '/users'
+      fullPath: '/portal/users'
+      preLoaderRoute: typeof PortalUsersRouteImport
+      parentRoute: typeof PortalRouteRoute
+    }
+    '/portal/reports': {
+      id: '/portal/reports'
+      path: '/reports'
+      fullPath: '/portal/reports'
+      preLoaderRoute: typeof PortalReportsRouteImport
+      parentRoute: typeof PortalRouteRoute
+    }
+    '/portal/notifications': {
+      id: '/portal/notifications'
+      path: '/notifications'
+      fullPath: '/portal/notifications'
+      preLoaderRoute: typeof PortalNotificationsRouteImport
+      parentRoute: typeof PortalRouteRoute
+    }
     '/portal/incidents': {
       id: '/portal/incidents'
       path: '/incidents'
@@ -192,11 +273,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalHierarchyRouteImport
       parentRoute: typeof PortalRouteRoute
     }
+    '/portal/assistant': {
+      id: '/portal/assistant'
+      path: '/assistant'
+      fullPath: '/portal/assistant'
+      preLoaderRoute: typeof PortalAssistantRouteImport
+      parentRoute: typeof PortalRouteRoute
+    }
     '/portal/assets': {
       id: '/portal/assets'
       path: '/assets'
       fullPath: '/portal/assets'
       preLoaderRoute: typeof PortalAssetsRouteImport
+      parentRoute: typeof PortalRouteRoute
+    }
+    '/portal/analytics': {
+      id: '/portal/analytics'
+      path: '/analytics'
+      fullPath: '/portal/analytics'
+      preLoaderRoute: typeof PortalAnalyticsRouteImport
       parentRoute: typeof PortalRouteRoute
     }
     '/api/chat': {
@@ -210,16 +305,26 @@ declare module '@tanstack/react-router' {
 }
 
 interface PortalRouteRouteChildren {
+  PortalAnalyticsRoute: typeof PortalAnalyticsRoute
   PortalAssetsRoute: typeof PortalAssetsRoute
+  PortalAssistantRoute: typeof PortalAssistantRoute
   PortalHierarchyRoute: typeof PortalHierarchyRoute
   PortalIncidentsRoute: typeof PortalIncidentsRoute
+  PortalNotificationsRoute: typeof PortalNotificationsRoute
+  PortalReportsRoute: typeof PortalReportsRoute
+  PortalUsersRoute: typeof PortalUsersRoute
   PortalIndexRoute: typeof PortalIndexRoute
 }
 
 const PortalRouteRouteChildren: PortalRouteRouteChildren = {
+  PortalAnalyticsRoute: PortalAnalyticsRoute,
   PortalAssetsRoute: PortalAssetsRoute,
+  PortalAssistantRoute: PortalAssistantRoute,
   PortalHierarchyRoute: PortalHierarchyRoute,
   PortalIncidentsRoute: PortalIncidentsRoute,
+  PortalNotificationsRoute: PortalNotificationsRoute,
+  PortalReportsRoute: PortalReportsRoute,
+  PortalUsersRoute: PortalUsersRoute,
   PortalIndexRoute: PortalIndexRoute,
 }
 
