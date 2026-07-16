@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal/index'
 import { Route as PortalIncidentsRouteImport } from './routes/portal/incidents'
 import { Route as PortalHierarchyRouteImport } from './routes/portal/hierarchy'
+import { Route as PortalAssetsRouteImport } from './routes/portal/assets'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const StoreRoute = StoreRouteImport.update({
@@ -53,6 +54,11 @@ const PortalHierarchyRoute = PortalHierarchyRouteImport.update({
   path: '/hierarchy',
   getParentRoute: () => PortalRouteRoute,
 } as any)
+const PortalAssetsRoute = PortalAssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => PortalRouteRoute,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
+  '/portal/assets': typeof PortalAssetsRoute
   '/portal/hierarchy': typeof PortalHierarchyRoute
   '/portal/incidents': typeof PortalIncidentsRoute
   '/portal/': typeof PortalIndexRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
+  '/portal/assets': typeof PortalAssetsRoute
   '/portal/hierarchy': typeof PortalHierarchyRoute
   '/portal/incidents': typeof PortalIncidentsRoute
   '/portal': typeof PortalIndexRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
+  '/portal/assets': typeof PortalAssetsRoute
   '/portal/hierarchy': typeof PortalHierarchyRoute
   '/portal/incidents': typeof PortalIncidentsRoute
   '/portal/': typeof PortalIndexRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/store'
     | '/api/chat'
+    | '/portal/assets'
     | '/portal/hierarchy'
     | '/portal/incidents'
     | '/portal/'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/store'
     | '/api/chat'
+    | '/portal/assets'
     | '/portal/hierarchy'
     | '/portal/incidents'
     | '/portal'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/store'
     | '/api/chat'
+    | '/portal/assets'
     | '/portal/hierarchy'
     | '/portal/incidents'
     | '/portal/'
@@ -180,6 +192,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalHierarchyRouteImport
       parentRoute: typeof PortalRouteRoute
     }
+    '/portal/assets': {
+      id: '/portal/assets'
+      path: '/assets'
+      fullPath: '/portal/assets'
+      preLoaderRoute: typeof PortalAssetsRouteImport
+      parentRoute: typeof PortalRouteRoute
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -191,12 +210,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface PortalRouteRouteChildren {
+  PortalAssetsRoute: typeof PortalAssetsRoute
   PortalHierarchyRoute: typeof PortalHierarchyRoute
   PortalIncidentsRoute: typeof PortalIncidentsRoute
   PortalIndexRoute: typeof PortalIndexRoute
 }
 
 const PortalRouteRouteChildren: PortalRouteRouteChildren = {
+  PortalAssetsRoute: PortalAssetsRoute,
   PortalHierarchyRoute: PortalHierarchyRoute,
   PortalIncidentsRoute: PortalIncidentsRoute,
   PortalIndexRoute: PortalIndexRoute,
