@@ -13,6 +13,7 @@ import { Route as StoreRouteImport } from './routes/store'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as PortalRouteRouteImport } from './routes/portal/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortalIndexRouteImport } from './routes/portal/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const StoreRoute = StoreRouteImport.update({
@@ -35,6 +36,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalIndexRoute = PortalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalRouteRoute,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -43,37 +49,46 @@ const ApiChatRoute = ApiChatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/portal': typeof PortalRouteRoute
+  '/portal': typeof PortalRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
+  '/portal/': typeof PortalIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/portal': typeof PortalRouteRoute
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
+  '/portal': typeof PortalIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/portal': typeof PortalRouteRoute
+  '/portal': typeof PortalRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
+  '/portal/': typeof PortalIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/portal' | '/auth' | '/store' | '/api/chat'
+  fullPaths: '/' | '/portal' | '/auth' | '/store' | '/api/chat' | '/portal/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/portal' | '/auth' | '/store' | '/api/chat'
-  id: '__root__' | '/' | '/portal' | '/auth' | '/store' | '/api/chat'
+  to: '/' | '/auth' | '/store' | '/api/chat' | '/portal'
+  id:
+    | '__root__'
+    | '/'
+    | '/portal'
+    | '/auth'
+    | '/store'
+    | '/api/chat'
+    | '/portal/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PortalRouteRoute: typeof PortalRouteRoute
+  PortalRouteRoute: typeof PortalRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   StoreRoute: typeof StoreRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -109,6 +124,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal/': {
+      id: '/portal/'
+      path: '/'
+      fullPath: '/portal/'
+      preLoaderRoute: typeof PortalIndexRouteImport
+      parentRoute: typeof PortalRouteRoute
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -119,9 +141,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface PortalRouteRouteChildren {
+  PortalIndexRoute: typeof PortalIndexRoute
+}
+
+const PortalRouteRouteChildren: PortalRouteRouteChildren = {
+  PortalIndexRoute: PortalIndexRoute,
+}
+
+const PortalRouteRouteWithChildren = PortalRouteRoute._addFileChildren(
+  PortalRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PortalRouteRoute: PortalRouteRoute,
+  PortalRouteRoute: PortalRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   StoreRoute: StoreRoute,
   ApiChatRoute: ApiChatRoute,
