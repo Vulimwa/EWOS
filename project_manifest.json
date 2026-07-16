@@ -1,10 +1,10 @@
 {
   "name": "EWOS — Early Warning Operating System",
   "version": "0.1.0",
-  "phase": 1,
-  "phase_name": "Platform Foundation",
-  "sprint_number": 1,
-  "last_checkpoint_timestamp": "2026-07-15T00:00:00Z",
+  "phase": 2,
+  "phase_name": "Organization Portal",
+  "sprint_number": 3,
+  "last_checkpoint_timestamp": "2026-07-16T00:00:00Z",
   "auto_proceed_flag": false,
   "platform_notes": "Runs on Lovable (TanStack Start + Lovable Cloud). Monorepo packages from the BRD map to in-repo folders: app-web=src/routes+components, ui-lib=src/components/ewos, plugin-sdk=src/sdk, backend-api=server functions + api routes, data=Cloud migrations, docs=docs/.",
   "design_tokens": "src/design/tokens.json (source of truth mirrored in src/styles.css)",
@@ -38,6 +38,10 @@
     { "id": "EWOS-16", "title": "PNG/PDF situation report export", "priority": "P2", "estimate": "M", "sprint": 3, "status": "todo", "acceptance_criteria": "Export current map + alert summary." },
     { "id": "EWOS-17", "title": "AI Act mode: prefilled report templates + recommended actions execution", "priority": "P1", "estimate": "L", "sprint": 4, "status": "todo", "acceptance_criteria": "Assistant can open prefilled alert drafts and trigger notification requests with human confirmation." },
     { "id": "EWOS-18", "title": "Marketplace publishing flow + HazardApp author checklist", "priority": "P2", "estimate": "L", "sprint": 4, "status": "todo", "acceptance_criteria": "Module submission metadata, permission review, QA checklist per docs/sdk.md." }
+   ,{ "id": "EWOS-19", "title": "Organization Portal shell + dashboard", "priority": "P0", "estimate": "L", "sprint": 3, "status": "done", "acceptance_criteria": "/portal shell with sectioned nav (Operate / Manage / Extend), KPI dashboard (hazards, incidents, command centers, installs, assets, notifications), reuses TopBar + AuthGate, links out to GIS workspace + Store + AI." }
+   ,{ "id": "EWOS-20", "title": "Command Centers hierarchy", "priority": "P0", "estimate": "M", "sprint": 3, "status": "done", "acceptance_criteria": "command_centers table with parent_id nesting, module_installs.command_center_id linkage, /portal/hierarchy tree UI with create form and installed-app grouping. HUSIKA + Field Operations seeded for Demo Org." }
+   ,{ "id": "EWOS-21", "title": "Incidents management", "priority": "P0", "estimate": "M", "sprint": 3, "status": "done", "acceptance_criteria": "incidents table (org-scoped, PostGIS geom), /portal/incidents CRUD (create form, filter by status, inline status transitions with closed_at)." }
+   ,{ "id": "EWOS-22", "title": "Assets registry", "priority": "P1", "estimate": "M", "sprint": 3, "status": "done", "acceptance_criteria": "assets table (PostGIS geom), /portal/assets card grid with type filters and create form; ready to render on GIS workspace once map integration lands." }
   ],
   "completed_tasks": [
     { "id": "EWOS-1", "completed_at": "2026-07-11" },
