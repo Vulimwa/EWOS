@@ -51,7 +51,7 @@ export function PortalShell() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
-      <TopBar orgName={org?.name} orgId={org?.id} searchInputId="portal-search" />
+      <TopBar orgName={org?.name} orgId={org?.id} onToggleNav={() => {}} searchInputId="portal-search" />
       <div className="flex min-h-0 flex-1">
         <aside
           aria-label="Portal navigation"
