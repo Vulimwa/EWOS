@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Building2, Flame, LayoutGrid, Store, Sun, Users, Waves, type LucideIcon } from "lucide-react";
+import { Building2, Flame, LayoutGrid, LayoutDashboard, Store, Sun, Users, Waves, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getRegisteredHazardApps } from "@/sdk";
 import { useModuleInstalls } from "@/lib/ewos-queries";
@@ -73,6 +73,17 @@ export function LeftNav({ collapsed, orgId, orgName, activeModule, onSelectModul
         >
           <Store className="size-4 shrink-0" />
           {!collapsed && <span>Capability Store</span>}
+        </Link>
+        <Link
+          to="/portal"
+          className={cn(
+            "flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
+            collapsed && "justify-center px-0",
+          )}
+          title="Organization Portal"
+        >
+          <LayoutDashboard className="size-4 shrink-0" />
+          {!collapsed && <span>Organization Portal</span>}
         </Link>
 
         {!collapsed && (
