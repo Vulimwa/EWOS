@@ -15,7 +15,7 @@ import { runFloodRiskScan } from "@/lib/flood.functions";
 import { useBoundaries, useEvents, useGauges, useOrg } from "@/lib/ewos-queries";
 import { AuthGate } from "@/components/ewos/AuthGate";
 
-export const Route = createFileRoute("/portal/workspace")({
+export const Route = createFileRoute("/workspace")({
   component: WorkspaceRoute,
 });
 
