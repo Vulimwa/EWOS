@@ -32,7 +32,7 @@ function StorePage() {
       <header className="border-b border-border bg-sidebar">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
           <Link
-            to="/store"
+            to="/workspace"
             className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
           >
             <ArrowLeft className="size-3.5" /> Workspace
