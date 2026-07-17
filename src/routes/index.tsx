@@ -1,180 +1,108 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { Toaster, toast } from "sonner";
-import "@/modules/registry";
-import { TopBar } from "@/components/ewos/TopBar";
-import { LeftNav } from "@/components/ewos/LeftNav";
-import { MapCanvas, type MapLayersState } from "@/components/ewos/MapCanvas";
-import { RightPanel } from "@/components/ewos/RightPanel";
-import { BottomDock } from "@/components/ewos/BottomDock";
-import { AIAssistant } from "@/components/ewos/AIAssistant";
-import { getHazardApp } from "@/sdk";
-import { runFloodRiskScan } from "@/lib/flood.functions";
-import { useBoundaries, useEvents, useGauges, useOrg } from "@/lib/ewos-queries";
-import { AuthGate } from "@/components/ewos/AuthGate";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Radar, ArrowRight } from "lucide-react";
+import { useEffect } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { useMyRoles } from "@/hooks/use-role";
+import { PORTAL_LIST, PORTALS, type PortalId } from "@/lib/portals";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
-  component: WorkspaceRoute,
+  component: LandingPage,
 });
 
-const SEARCH_INPUT_ID = "ewos-global-search";
+/** Landing / portal chooser. Signed-in users can jump straight to a portal they have access to. */
+function LandingPage() {
+  const { session, loading } = useAuth();
+  const { data: roles } = useMyRoles();
+  const navigate = useNavigate();
 
-function WorkspaceRoute() {
-  return (
-    <AuthGate>
-      <Workspace />
-    </AuthGate>
-  );
-}
+  const rolesSet = new Set((roles ?? []).map((r) => r.role));
+  const hasAccess = (id: PortalId) => {
+    if (id === "organization") return rolesSet.size > 0; // any org role works
+    return rolesSet.has(PORTALS[id].role);
+  };
 
-function Workspace() {
-  const { data: org } = useOrg();
-  const { data: events, isLoading: eventsLoading } = useEvents(org?.id);
-  const { data: boundaries } = useBoundaries(org?.id);
-  const { data: gauges } = useGauges(org?.id);
-
-  const [navCollapsed, setNavCollapsed] = useState(false);
-  const [rightOpen, setRightOpen] = useState(true);
-  const [rightWidth, setRightWidth] = useState(320);
-  const [activeModule, setActiveModule] = useState<string | null>("flood-watch");
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  const [focusEventId, setFocusEventId] = useState<string | null>(null);
-  const [aiOpen, setAiOpen] = useState(false);
-  const [layers, setLayers] = useState<MapLayersState>({ alerts: true, boundaries: true, gauges: true });
-
-  const scan = useServerFn(runFloodRiskScan);
-  const queryClient = useQueryClient();
-  const scanMutation = useMutation({
-    mutationFn: () => {
-      if (!gauges?.[0]) throw new Error("No gauge available");
-      return scan({ data: { gaugeId: gauges[0].id } });
-    },
-    onSuccess: (result) => {
-      queryClient.invalidateQueries({ queryKey: ["events", org?.id] });
-      queryClient.invalidateQueries({ queryKey: ["readings", gauges?.[0]?.id] });
-      queryClient.invalidateQueries({ queryKey: ["notifications", org?.id] });
-      toast(
-        result.eventPublished
-          ? `FloodAlertIssued — ${result.severity.toUpperCase()} at ${result.levelM.toFixed(2)} m`
-          : `Scan complete — ${result.severity} (${result.levelM.toFixed(2)} m)`,
-      );
-    },
-    onError: (error) => toast.error(error instanceof Error ? error.message : "Scan failed"),
-  });
-
-  // Keyboard shortcuts: ⌘K search, [ nav, ] right panel, A assistant
+  // Auto-redirect: if the user has exactly one accessible portal, take them there.
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      const typing = target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable;
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        document.getElementById(SEARCH_INPUT_ID)?.focus();
-        return;
-      }
-      if (typing) return;
-      if (e.key === "[") setNavCollapsed((v) => !v);
-      if (e.key === "]") setRightOpen((v) => !v);
-      if (e.key.toLowerCase() === "a") setAiOpen((v) => !v);
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, []);
-
-  // Right panel resize
-  const dragState = useRef<{ startX: number; startWidth: number } | null>(null);
-  const onResizeStart = useCallback(
-    (e: React.PointerEvent) => {
-      dragState.current = { startX: e.clientX, startWidth: rightWidth };
-      const move = (ev: PointerEvent) => {
-        if (!dragState.current) return;
-        const delta = dragState.current.startX - ev.clientX;
-        setRightWidth(Math.min(520, Math.max(260, dragState.current.startWidth + delta)));
-      };
-      const up = () => {
-        dragState.current = null;
-        window.removeEventListener("pointermove", move);
-        window.removeEventListener("pointerup", up);
-      };
-      window.addEventListener("pointermove", move);
-      window.addEventListener("pointerup", up);
-    },
-    [rightWidth],
-  );
-
-  const activeApp = activeModule ? getHazardApp(activeModule) : undefined;
+    if (!session || !roles) return;
+    const accessible = PORTAL_LIST.filter((p) => hasAccess(p.id));
+    if (accessible.length === 1) void navigate({ to: accessible[0].home });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, roles]);
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
-      <TopBar
-        orgName={org?.name}
-        orgId={org?.id}
-        onToggleNav={() => setNavCollapsed((v) => !v)}
-        searchInputId={SEARCH_INPUT_ID}
-      />
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
+        <div className="flex items-center gap-2">
+          <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <Radar className="size-4" />
+          </span>
+          <span className="text-data text-sm font-semibold tracking-widest">EWOS</span>
+        </div>
+        <div className="text-xs text-muted-foreground">
+          {loading ? null : session ? (
+            <span>Signed in as {session.user.email}</span>
+          ) : (
+            <span>Early Warning Operating System</span>
+          )}
+        </div>
+      </header>
 
-      <div className="flex min-h-0 flex-1">
-        <LeftNav
-          collapsed={navCollapsed}
-          orgId={org?.id}
-          orgName={org?.name}
-          activeModule={activeModule}
-          onSelectModule={setActiveModule}
-        />
+      <main className="mx-auto max-w-6xl px-6 pb-24 pt-8">
+        <div className="mb-10 max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">Choose your portal</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
+            One platform. Three operating surfaces.
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground">
+            EWOS is the operating system for environmental intelligence. Organizations run their workspace,
+            developers build HazardApps, and platform admins keep the ecosystem healthy.
+          </p>
+        </div>
 
-        <main className="relative min-w-0 flex-1">
-          <MapCanvas
-            center={[org?.center_lng ?? 34.02, org?.center_lat ?? 0.1]}
-            zoom={org?.default_zoom ?? 10}
-            events={events ?? []}
-            boundaries={(boundaries ?? []) as never}
-            gauges={gauges ?? []}
-            layers={layers}
-            onLayersChange={setLayers}
-            focusEventId={focusEventId}
-            onSelectEvent={(id) => setSelectedEventId(id)}
-          />
-          {org &&
-            activeApp?.panels
-              .filter((p) => p.placement === "map-overlay")
-              .map((panel) => <panel.component key={panel.id} orgId={org.id} />)}
-        </main>
+        <div className="grid gap-4 md:grid-cols-3">
+          {PORTAL_LIST.map((portal) => {
+            const Icon = portal.icon;
+            const access = session && hasAccess(portal.id);
+            const targetTo = access ? portal.home : portal.authPath;
+            return (
+              <Link
+                key={portal.id}
+                to={targetTo}
+                className={cn(
+                  "group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/60 hover:shadow-[0_0_0_1px_hsl(var(--primary)/.4)]",
+                )}
+              >
+                <div
+                  className={cn(
+                    "absolute inset-0 -z-0 bg-gradient-to-br opacity-60 transition-opacity group-hover:opacity-100",
+                    portal.accent,
+                  )}
+                />
+                <div className="relative z-10 flex flex-1 flex-col">
+                  <div className="mb-4 flex size-10 items-center justify-center rounded-md border border-border bg-background/60">
+                    <Icon className="size-5 text-primary" />
+                  </div>
+                  <h2 className="text-lg font-semibold">{portal.name}</h2>
+                  <p className="mt-1 text-xs font-medium text-primary">{portal.tagline}</p>
+                  <p className="mt-3 flex-1 text-sm text-muted-foreground">{portal.description}</p>
+                  <div className="mt-6 flex items-center justify-between text-xs">
+                    <span className="font-medium text-foreground">
+                      {access ? "Open portal" : session ? "Request access" : "Sign in or sign up"}
+                    </span>
+                    <ArrowRight className="size-4 text-primary transition-transform group-hover:translate-x-1" />
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
 
-        {rightOpen && (
-          <>
-            <div
-              role="separator"
-              aria-orientation="vertical"
-              aria-label="Resize contextual panel"
-              onPointerDown={onResizeStart}
-              className="w-1 shrink-0 cursor-col-resize bg-border/60 transition-colors hover:bg-primary/60"
-            />
-            <div style={{ width: rightWidth }} className="shrink-0 border-l border-border">
-              <RightPanel
-                events={events ?? []}
-                loading={eventsLoading}
-                selectedEventId={selectedEventId}
-                onSelectEvent={setSelectedEventId}
-                onFocusMap={(id) => setFocusEventId(id)}
-                onOpenAI={() => setAiOpen(true)}
-              />
-            </div>
-          </>
-        )}
-      </div>
-
-      <BottomDock
-        activeModule={activeModule}
-        scanning={scanMutation.isPending}
-        onRunScan={() => scanMutation.mutate()}
-        onToggleAI={() => setAiOpen((v) => !v)}
-        eventCount={events?.length ?? 0}
-      />
-
-      <AIAssistant open={aiOpen} onOpenChange={setAiOpen} />
-      <Toaster theme="dark" position="top-center" />
+        <p className="mt-8 text-[11px] text-muted-foreground">
+          Each portal has its own sign-in flow. Your account can hold access to more than one portal — you'll be able to
+          switch from the top bar once inside.
+        </p>
+      </main>
     </div>
   );
 }

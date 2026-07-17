@@ -79,7 +79,7 @@ function PortalDashboard() {
         <section className="lg:col-span-2 rounded-lg border border-border bg-card">
           <header className="flex items-center justify-between border-b border-border px-4 py-3">
             <h2 className="text-sm font-semibold">Active hazards</h2>
-            <Link to="/" className="text-xs text-primary hover:underline">
+            <Link to="/workspace" className="text-xs text-primary hover:underline">
               Open GIS workspace →
             </Link>
           </header>
@@ -164,7 +164,7 @@ function PortalDashboard() {
                 : "No active hazards. Consider running a routine risk scan from the GIS workspace."}
             </p>
             <Link
-              to="/"
+              to="/workspace"
               className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
             >
               Ask the assistant →

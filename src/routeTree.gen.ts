@@ -9,11 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as StoreRouteImport } from './routes/store'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as PortalRouteRouteImport } from './routes/portal/route'
+import { Route as DeveloperRouteRouteImport } from './routes/developer/route'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal/index'
+import { Route as DeveloperIndexRouteImport } from './routes/developer/index'
+import { Route as AuthIndexRouteImport } from './routes/auth.index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PortalUsersRouteImport } from './routes/portal/users'
 import { Route as PortalReportsRouteImport } from './routes/portal/reports'
 import { Route as PortalNotificationsRouteImport } from './routes/portal/notifications'
@@ -22,21 +27,45 @@ import { Route as PortalHierarchyRouteImport } from './routes/portal/hierarchy'
 import { Route as PortalAssistantRouteImport } from './routes/portal/assistant'
 import { Route as PortalAssetsRouteImport } from './routes/portal/assets'
 import { Route as PortalAnalyticsRouteImport } from './routes/portal/analytics'
+import { Route as DeveloperSdkRouteImport } from './routes/developer/sdk'
+import { Route as DeveloperSandboxRouteImport } from './routes/developer/sandbox'
+import { Route as DeveloperPluginsRouteImport } from './routes/developer/plugins'
+import { Route as DeveloperMarketplaceRouteImport } from './routes/developer/marketplace'
+import { Route as DeveloperEventsRouteImport } from './routes/developer/events'
+import { Route as DeveloperApiRouteImport } from './routes/developer/api'
+import { Route as DeveloperAnalyticsRouteImport } from './routes/developer/analytics'
+import { Route as AuthOrganizationRouteImport } from './routes/auth.organization'
+import { Route as AuthDeveloperRouteImport } from './routes/auth.developer'
+import { Route as AuthAdminRouteImport } from './routes/auth.admin'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as AdminMarketplaceRouteImport } from './routes/admin/marketplace'
+import { Route as AdminInfrastructureRouteImport } from './routes/admin/infrastructure'
+import { Route as AdminAiRouteImport } from './routes/admin/ai'
 
+const WorkspaceRoute = WorkspaceRouteImport.update({
+  id: '/workspace',
+  path: '/workspace',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StoreRoute = StoreRouteImport.update({
   id: '/store',
   path: '/store',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PortalRouteRoute = PortalRouteRouteImport.update({
   id: '/portal',
   path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeveloperRouteRoute = DeveloperRouteRouteImport.update({
+  id: '/developer',
+  path: '/developer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -48,6 +77,21 @@ const PortalIndexRoute = PortalIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PortalRouteRoute,
+} as any)
+const DeveloperIndexRoute = DeveloperIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DeveloperRouteRoute,
+} as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
+  id: '/auth/',
+  path: '/auth/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const PortalUsersRoute = PortalUsersRouteImport.update({
   id: '/users',
@@ -89,18 +133,104 @@ const PortalAnalyticsRoute = PortalAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => PortalRouteRoute,
 } as any)
+const DeveloperSdkRoute = DeveloperSdkRouteImport.update({
+  id: '/sdk',
+  path: '/sdk',
+  getParentRoute: () => DeveloperRouteRoute,
+} as any)
+const DeveloperSandboxRoute = DeveloperSandboxRouteImport.update({
+  id: '/sandbox',
+  path: '/sandbox',
+  getParentRoute: () => DeveloperRouteRoute,
+} as any)
+const DeveloperPluginsRoute = DeveloperPluginsRouteImport.update({
+  id: '/plugins',
+  path: '/plugins',
+  getParentRoute: () => DeveloperRouteRoute,
+} as any)
+const DeveloperMarketplaceRoute = DeveloperMarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => DeveloperRouteRoute,
+} as any)
+const DeveloperEventsRoute = DeveloperEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => DeveloperRouteRoute,
+} as any)
+const DeveloperApiRoute = DeveloperApiRouteImport.update({
+  id: '/api',
+  path: '/api',
+  getParentRoute: () => DeveloperRouteRoute,
+} as any)
+const DeveloperAnalyticsRoute = DeveloperAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => DeveloperRouteRoute,
+} as any)
+const AuthOrganizationRoute = AuthOrganizationRouteImport.update({
+  id: '/auth/organization',
+  path: '/auth/organization',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthDeveloperRoute = AuthDeveloperRouteImport.update({
+  id: '/auth/developer',
+  path: '/auth/developer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthAdminRoute = AuthAdminRouteImport.update({
+  id: '/auth/admin',
+  path: '/auth/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminMarketplaceRoute = AdminMarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminInfrastructureRoute = AdminInfrastructureRouteImport.update({
+  id: '/infrastructure',
+  path: '/infrastructure',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAiRoute = AdminAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/developer': typeof DeveloperRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
-  '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
+  '/workspace': typeof WorkspaceRoute
+  '/admin/ai': typeof AdminAiRoute
+  '/admin/infrastructure': typeof AdminInfrastructureRoute
+  '/admin/marketplace': typeof AdminMarketplaceRoute
+  '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
+  '/auth/admin': typeof AuthAdminRoute
+  '/auth/developer': typeof AuthDeveloperRoute
+  '/auth/organization': typeof AuthOrganizationRoute
+  '/developer/analytics': typeof DeveloperAnalyticsRoute
+  '/developer/api': typeof DeveloperApiRoute
+  '/developer/events': typeof DeveloperEventsRoute
+  '/developer/marketplace': typeof DeveloperMarketplaceRoute
+  '/developer/plugins': typeof DeveloperPluginsRoute
+  '/developer/sandbox': typeof DeveloperSandboxRoute
+  '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
   '/portal/assistant': typeof PortalAssistantRoute
@@ -109,13 +239,30 @@ export interface FileRoutesByFullPath {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
+  '/admin/': typeof AdminIndexRoute
+  '/auth/': typeof AuthIndexRoute
+  '/developer/': typeof DeveloperIndexRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
+  '/workspace': typeof WorkspaceRoute
+  '/admin/ai': typeof AdminAiRoute
+  '/admin/infrastructure': typeof AdminInfrastructureRoute
+  '/admin/marketplace': typeof AdminMarketplaceRoute
+  '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
+  '/auth/admin': typeof AuthAdminRoute
+  '/auth/developer': typeof AuthDeveloperRoute
+  '/auth/organization': typeof AuthOrganizationRoute
+  '/developer/analytics': typeof DeveloperAnalyticsRoute
+  '/developer/api': typeof DeveloperApiRoute
+  '/developer/events': typeof DeveloperEventsRoute
+  '/developer/marketplace': typeof DeveloperMarketplaceRoute
+  '/developer/plugins': typeof DeveloperPluginsRoute
+  '/developer/sandbox': typeof DeveloperSandboxRoute
+  '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
   '/portal/assistant': typeof PortalAssistantRoute
@@ -124,15 +271,34 @@ export interface FileRoutesByTo {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
+  '/admin': typeof AdminIndexRoute
+  '/auth': typeof AuthIndexRoute
+  '/developer': typeof DeveloperIndexRoute
   '/portal': typeof PortalIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/developer': typeof DeveloperRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
-  '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
+  '/workspace': typeof WorkspaceRoute
+  '/admin/ai': typeof AdminAiRoute
+  '/admin/infrastructure': typeof AdminInfrastructureRoute
+  '/admin/marketplace': typeof AdminMarketplaceRoute
+  '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
+  '/auth/admin': typeof AuthAdminRoute
+  '/auth/developer': typeof AuthDeveloperRoute
+  '/auth/organization': typeof AuthOrganizationRoute
+  '/developer/analytics': typeof DeveloperAnalyticsRoute
+  '/developer/api': typeof DeveloperApiRoute
+  '/developer/events': typeof DeveloperEventsRoute
+  '/developer/marketplace': typeof DeveloperMarketplaceRoute
+  '/developer/plugins': typeof DeveloperPluginsRoute
+  '/developer/sandbox': typeof DeveloperSandboxRoute
+  '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
   '/portal/assistant': typeof PortalAssistantRoute
@@ -141,16 +307,35 @@ export interface FileRoutesById {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
+  '/admin/': typeof AdminIndexRoute
+  '/auth/': typeof AuthIndexRoute
+  '/developer/': typeof DeveloperIndexRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/developer'
     | '/portal'
-    | '/auth'
     | '/store'
+    | '/workspace'
+    | '/admin/ai'
+    | '/admin/infrastructure'
+    | '/admin/marketplace'
+    | '/admin/users'
     | '/api/chat'
+    | '/auth/admin'
+    | '/auth/developer'
+    | '/auth/organization'
+    | '/developer/analytics'
+    | '/developer/api'
+    | '/developer/events'
+    | '/developer/marketplace'
+    | '/developer/plugins'
+    | '/developer/sandbox'
+    | '/developer/sdk'
     | '/portal/analytics'
     | '/portal/assets'
     | '/portal/assistant'
@@ -159,13 +344,30 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
+    | '/admin/'
+    | '/auth/'
+    | '/developer/'
     | '/portal/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/auth'
     | '/store'
+    | '/workspace'
+    | '/admin/ai'
+    | '/admin/infrastructure'
+    | '/admin/marketplace'
+    | '/admin/users'
     | '/api/chat'
+    | '/auth/admin'
+    | '/auth/developer'
+    | '/auth/organization'
+    | '/developer/analytics'
+    | '/developer/api'
+    | '/developer/events'
+    | '/developer/marketplace'
+    | '/developer/plugins'
+    | '/developer/sandbox'
+    | '/developer/sdk'
     | '/portal/analytics'
     | '/portal/assets'
     | '/portal/assistant'
@@ -174,14 +376,33 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
+    | '/admin'
+    | '/auth'
+    | '/developer'
     | '/portal'
   id:
     | '__root__'
     | '/'
+    | '/admin'
+    | '/developer'
     | '/portal'
-    | '/auth'
     | '/store'
+    | '/workspace'
+    | '/admin/ai'
+    | '/admin/infrastructure'
+    | '/admin/marketplace'
+    | '/admin/users'
     | '/api/chat'
+    | '/auth/admin'
+    | '/auth/developer'
+    | '/auth/organization'
+    | '/developer/analytics'
+    | '/developer/api'
+    | '/developer/events'
+    | '/developer/marketplace'
+    | '/developer/plugins'
+    | '/developer/sandbox'
+    | '/developer/sdk'
     | '/portal/analytics'
     | '/portal/assets'
     | '/portal/assistant'
@@ -190,19 +411,35 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
+    | '/admin/'
+    | '/auth/'
+    | '/developer/'
     | '/portal/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  DeveloperRouteRoute: typeof DeveloperRouteRouteWithChildren
   PortalRouteRoute: typeof PortalRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
   StoreRoute: typeof StoreRoute
+  WorkspaceRoute: typeof WorkspaceRoute
   ApiChatRoute: typeof ApiChatRoute
+  AuthAdminRoute: typeof AuthAdminRoute
+  AuthDeveloperRoute: typeof AuthDeveloperRoute
+  AuthOrganizationRoute: typeof AuthOrganizationRoute
+  AuthIndexRoute: typeof AuthIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/workspace': {
+      id: '/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof WorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/store': {
       id: '/store'
       path: '/store'
@@ -210,18 +447,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoreRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/portal': {
       id: '/portal'
       path: '/portal'
       fullPath: '/portal'
       preLoaderRoute: typeof PortalRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/developer': {
+      id: '/developer'
+      path: '/developer'
+      fullPath: '/developer'
+      preLoaderRoute: typeof DeveloperRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -237,6 +481,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/'
       preLoaderRoute: typeof PortalIndexRouteImport
       parentRoute: typeof PortalRouteRoute
+    }
+    '/developer/': {
+      id: '/developer/'
+      path: '/'
+      fullPath: '/developer/'
+      preLoaderRoute: typeof DeveloperIndexRouteImport
+      parentRoute: typeof DeveloperRouteRoute
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/auth'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/portal/users': {
       id: '/portal/users'
@@ -294,6 +559,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalAnalyticsRouteImport
       parentRoute: typeof PortalRouteRoute
     }
+    '/developer/sdk': {
+      id: '/developer/sdk'
+      path: '/sdk'
+      fullPath: '/developer/sdk'
+      preLoaderRoute: typeof DeveloperSdkRouteImport
+      parentRoute: typeof DeveloperRouteRoute
+    }
+    '/developer/sandbox': {
+      id: '/developer/sandbox'
+      path: '/sandbox'
+      fullPath: '/developer/sandbox'
+      preLoaderRoute: typeof DeveloperSandboxRouteImport
+      parentRoute: typeof DeveloperRouteRoute
+    }
+    '/developer/plugins': {
+      id: '/developer/plugins'
+      path: '/plugins'
+      fullPath: '/developer/plugins'
+      preLoaderRoute: typeof DeveloperPluginsRouteImport
+      parentRoute: typeof DeveloperRouteRoute
+    }
+    '/developer/marketplace': {
+      id: '/developer/marketplace'
+      path: '/marketplace'
+      fullPath: '/developer/marketplace'
+      preLoaderRoute: typeof DeveloperMarketplaceRouteImport
+      parentRoute: typeof DeveloperRouteRoute
+    }
+    '/developer/events': {
+      id: '/developer/events'
+      path: '/events'
+      fullPath: '/developer/events'
+      preLoaderRoute: typeof DeveloperEventsRouteImport
+      parentRoute: typeof DeveloperRouteRoute
+    }
+    '/developer/api': {
+      id: '/developer/api'
+      path: '/api'
+      fullPath: '/developer/api'
+      preLoaderRoute: typeof DeveloperApiRouteImport
+      parentRoute: typeof DeveloperRouteRoute
+    }
+    '/developer/analytics': {
+      id: '/developer/analytics'
+      path: '/analytics'
+      fullPath: '/developer/analytics'
+      preLoaderRoute: typeof DeveloperAnalyticsRouteImport
+      parentRoute: typeof DeveloperRouteRoute
+    }
+    '/auth/organization': {
+      id: '/auth/organization'
+      path: '/auth/organization'
+      fullPath: '/auth/organization'
+      preLoaderRoute: typeof AuthOrganizationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/developer': {
+      id: '/auth/developer'
+      path: '/auth/developer'
+      fullPath: '/auth/developer'
+      preLoaderRoute: typeof AuthDeveloperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/admin': {
+      id: '/auth/admin'
+      path: '/auth/admin'
+      fullPath: '/auth/admin'
+      preLoaderRoute: typeof AuthAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -301,8 +636,82 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/marketplace': {
+      id: '/admin/marketplace'
+      path: '/marketplace'
+      fullPath: '/admin/marketplace'
+      preLoaderRoute: typeof AdminMarketplaceRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/infrastructure': {
+      id: '/admin/infrastructure'
+      path: '/infrastructure'
+      fullPath: '/admin/infrastructure'
+      preLoaderRoute: typeof AdminInfrastructureRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/ai': {
+      id: '/admin/ai'
+      path: '/ai'
+      fullPath: '/admin/ai'
+      preLoaderRoute: typeof AdminAiRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
   }
 }
+
+interface AdminRouteRouteChildren {
+  AdminAiRoute: typeof AdminAiRoute
+  AdminInfrastructureRoute: typeof AdminInfrastructureRoute
+  AdminMarketplaceRoute: typeof AdminMarketplaceRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAiRoute: AdminAiRoute,
+  AdminInfrastructureRoute: AdminInfrastructureRoute,
+  AdminMarketplaceRoute: AdminMarketplaceRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
+interface DeveloperRouteRouteChildren {
+  DeveloperAnalyticsRoute: typeof DeveloperAnalyticsRoute
+  DeveloperApiRoute: typeof DeveloperApiRoute
+  DeveloperEventsRoute: typeof DeveloperEventsRoute
+  DeveloperMarketplaceRoute: typeof DeveloperMarketplaceRoute
+  DeveloperPluginsRoute: typeof DeveloperPluginsRoute
+  DeveloperSandboxRoute: typeof DeveloperSandboxRoute
+  DeveloperSdkRoute: typeof DeveloperSdkRoute
+  DeveloperIndexRoute: typeof DeveloperIndexRoute
+}
+
+const DeveloperRouteRouteChildren: DeveloperRouteRouteChildren = {
+  DeveloperAnalyticsRoute: DeveloperAnalyticsRoute,
+  DeveloperApiRoute: DeveloperApiRoute,
+  DeveloperEventsRoute: DeveloperEventsRoute,
+  DeveloperMarketplaceRoute: DeveloperMarketplaceRoute,
+  DeveloperPluginsRoute: DeveloperPluginsRoute,
+  DeveloperSandboxRoute: DeveloperSandboxRoute,
+  DeveloperSdkRoute: DeveloperSdkRoute,
+  DeveloperIndexRoute: DeveloperIndexRoute,
+}
+
+const DeveloperRouteRouteWithChildren = DeveloperRouteRoute._addFileChildren(
+  DeveloperRouteRouteChildren,
+)
 
 interface PortalRouteRouteChildren {
   PortalAnalyticsRoute: typeof PortalAnalyticsRoute
@@ -334,21 +743,17 @@ const PortalRouteRouteWithChildren = PortalRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
+  DeveloperRouteRoute: DeveloperRouteRouteWithChildren,
   PortalRouteRoute: PortalRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
   StoreRoute: StoreRoute,
+  WorkspaceRoute: WorkspaceRoute,
   ApiChatRoute: ApiChatRoute,
+  AuthAdminRoute: AuthAdminRoute,
+  AuthDeveloperRoute: AuthDeveloperRoute,
+  AuthOrganizationRoute: AuthOrganizationRoute,
+  AuthIndexRoute: AuthIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

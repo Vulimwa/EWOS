@@ -147,7 +147,7 @@ export function TopBar({ orgName, orgId, onToggleNav, searchInputId }: TopBarPro
                     onClick={async () => {
                       await signOut();
                       setUserOpen(false);
-                      void navigate({ to: "/auth" });
+                      void navigate({ to: "/" });
                     }}
                     className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs text-foreground hover:bg-accent"
                   >
@@ -157,7 +157,7 @@ export function TopBar({ orgName, orgId, onToggleNav, searchInputId }: TopBarPro
                 </>
               ) : (
                 <Link
-                  to="/auth"
+                  to="/"
                   onClick={() => setUserOpen(false)}
                   className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs text-foreground hover:bg-accent"
                 >

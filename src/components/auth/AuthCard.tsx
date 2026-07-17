@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { Radar } from "lucide-react";
+import { useNavigate, Link } from "@tanstack/react-router";
+import { Radar, ArrowLeft } from "lucide-react";
 import { toast, Toaster } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
@@ -8,12 +8,14 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PORTALS, type PortalId } from "@/lib/portals";
 
-export const Route = createFileRoute("/auth")({
-  component: AuthPage,
-});
+interface AuthCardProps {
+  portalId: PortalId;
+}
 
-function AuthPage() {
+export function AuthCard({ portalId }: AuthCardProps) {
+  const portal = PORTALS[portalId];
   const navigate = useNavigate();
   const { session, loading } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -22,22 +24,31 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
 
   if (!loading && session) {
-    void navigate({ to: "/" });
+    void navigate({ to: portal.home });
   }
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setBusy(true);
     try {
-      const fn = mode === "signin" ? supabase.auth.signInWithPassword : supabase.auth.signUp;
-      const { error } = await fn.call(supabase.auth, {
-        email,
-        password,
-        options: mode === "signup" ? { emailRedirectTo: `${window.location.origin}/` } : undefined,
-      });
-      if (error) throw error;
-      toast.success(mode === "signin" ? "Signed in" : "Account created");
-      void navigate({ to: "/" });
+      if (mode === "signup") {
+        if (!portal.allowSignup) throw new Error("Sign-up is invite-only for this portal.");
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}${portal.home}`,
+            data: { intended_portal: portalId },
+          },
+        });
+        if (error) throw error;
+        toast.success("Account created");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("Signed in");
+      }
+      void navigate({ to: portal.home });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Authentication failed");
     } finally {
@@ -49,7 +60,8 @@ function AuthPage() {
     setBusy(true);
     try {
       const { error } = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/`,
+        redirect_uri: `${window.location.origin}${portal.home}`,
+        extraParams: { intended_portal: portalId },
       });
       if (error) throw error;
     } catch (err) {
@@ -58,26 +70,32 @@ function AuthPage() {
     }
   };
 
+  const Icon = portal.icon;
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <Toaster theme="dark" />
       <div className="w-full max-w-sm">
-        <Link to="/" className="mb-6 flex items-center justify-center gap-2">
+        <Link to="/" className="mb-4 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="size-3" /> All portals
+        </Link>
+        <div className="mb-6 flex items-center justify-center gap-2">
           <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <Radar className="size-4" />
           </span>
           <span className="text-data text-sm font-semibold tracking-widest text-foreground">EWOS</span>
-        </Link>
+        </div>
 
         <div className="rounded-lg border border-border bg-card p-6 shadow-lg">
+          <div className="mb-4 flex items-center gap-2">
+            <Icon className="size-4 text-primary" />
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+              {portal.name}
+            </span>
+          </div>
           <h1 className="text-lg font-semibold text-foreground">
-            {mode === "signin" ? "Sign in to your workspace" : "Create your operator account"}
+            {mode === "signin" ? "Sign in" : "Create account"}
           </h1>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {mode === "signin"
-              ? "Access live hazard events and decision tools."
-              : "You'll join the Demo Org as a viewer to get started."}
-          </p>
+          <p className="mt-1 text-xs text-muted-foreground">{portal.tagline}</p>
 
           <Button onClick={google} disabled={busy} variant="outline" className="mt-5 w-full">
             Continue with Google
@@ -101,13 +119,19 @@ function AuthPage() {
             </Button>
           </form>
 
-          <button
-            type="button"
-            onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-            className="mt-4 w-full text-center text-xs text-muted-foreground hover:text-foreground"
-          >
-            {mode === "signin" ? "Need an account? Sign up" : "Already have an account? Sign in"}
-          </button>
+          {portal.allowSignup ? (
+            <button
+              type="button"
+              onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
+              className="mt-4 w-full text-center text-xs text-muted-foreground hover:text-foreground"
+            >
+              {mode === "signin" ? "Need an account? Sign up" : "Already have an account? Sign in"}
+            </button>
+          ) : (
+            <p className="mt-4 text-center text-[11px] text-muted-foreground">
+              Platform Admin is invite-only. Contact the EWOS team for access.
+            </p>
+          )}
         </div>
       </div>
     </div>
