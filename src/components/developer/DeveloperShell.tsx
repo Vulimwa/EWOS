@@ -19,7 +19,7 @@ export function DeveloperShell() {
   const { pathname } = useLocation();
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
-      <TopBar orgName="Developer" onToggleNav={() => {}} searchInputId="dev-search" />
+      <TopBar orgName="Developer" orgId={undefined} onToggleNav={() => {}} searchInputId="dev-search" />
       <div className="flex min-h-0 flex-1">
         <aside className="flex w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar">
           <div className="border-b border-sidebar-border px-4 py-3">
