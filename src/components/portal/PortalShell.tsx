@@ -29,7 +29,7 @@ const NAV: NavItem[] = [
   { to: "/portal/hierarchy", label: "Command Centers", icon: Network, section: "operate" },
   { to: "/portal/incidents", label: "Incidents", icon: Siren, section: "operate" },
   { to: "/portal/assets", label: "Assets", icon: Boxes, section: "operate" },
-  { to: "/", label: "GIS Workspace", icon: MapIcon, section: "operate" },
+  { to: "/workspace", label: "GIS Workspace", icon: MapIcon, section: "operate" },
   { to: "/portal/notifications", label: "Notifications", icon: BellRing, section: "manage" },
   { to: "/portal/users", label: "Users & Roles", icon: Users, section: "manage" },
   { to: "/portal/reports", label: "Reports", icon: FileBarChart, section: "manage" },
