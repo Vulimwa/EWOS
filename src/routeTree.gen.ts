@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as StoreRouteImport } from './routes/store'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as PortalRouteRouteImport } from './routes/portal/route'
 import { Route as PortalIndexRouteImport } from './routes/portal/index'
 import { Route as PortalUsersRouteImport } from './routes/portal/users'
@@ -32,11 +31,6 @@ const WorkspaceRoute = WorkspaceRouteImport.update({
 const StoreRoute = StoreRouteImport.update({
   id: '/store',
   path: '/store',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortalRouteRoute = PortalRouteRouteImport.update({
@@ -97,7 +91,6 @@ const ApiChatRoute = ApiChatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/portal': typeof PortalRouteRouteWithChildren
-  '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
   '/api/chat': typeof ApiChatRoute
@@ -112,7 +105,6 @@ export interface FileRoutesByFullPath {
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRoutesByTo {
-  '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
   '/api/chat': typeof ApiChatRoute
@@ -129,7 +121,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/portal': typeof PortalRouteRouteWithChildren
-  '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
   '/api/chat': typeof ApiChatRoute
@@ -147,7 +138,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/portal'
-    | '/auth'
     | '/store'
     | '/workspace'
     | '/api/chat'
@@ -162,7 +152,6 @@ export interface FileRouteTypes {
     | '/portal/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/auth'
     | '/store'
     | '/workspace'
     | '/api/chat'
@@ -178,7 +167,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/portal'
-    | '/auth'
     | '/store'
     | '/workspace'
     | '/api/chat'
@@ -195,7 +183,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   PortalRouteRoute: typeof PortalRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
   StoreRoute: typeof StoreRoute
   WorkspaceRoute: typeof WorkspaceRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -215,13 +202,6 @@ declare module '@tanstack/react-router' {
       path: '/store'
       fullPath: '/store'
       preLoaderRoute: typeof StoreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portal': {
@@ -334,7 +314,6 @@ const PortalRouteRouteWithChildren = PortalRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   PortalRouteRoute: PortalRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
   StoreRoute: StoreRoute,
   WorkspaceRoute: WorkspaceRoute,
   ApiChatRoute: ApiChatRoute,
