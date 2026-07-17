@@ -165,6 +165,50 @@ export type Database = {
           },
         ]
       }
+      evacuation_routes: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          geom: unknown
+          geom_geojson: Json | null
+          id: string
+          name: string
+          notes: string | null
+          org_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          geom?: unknown
+          geom_geojson?: Json | null
+          id?: string
+          name: string
+          notes?: string | null
+          org_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          geom?: unknown
+          geom_geojson?: Json | null
+          id?: string
+          name?: string
+          notes?: string | null
+          org_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "evacuation_routes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           created_at: string
@@ -390,6 +434,7 @@ export type Database = {
           permissions: Json
           privacy_classification: string
           publisher: string
+          publisher_id: string | null
           slug: string
           status: string
           version: string
@@ -405,6 +450,7 @@ export type Database = {
           permissions?: Json
           privacy_classification?: string
           publisher?: string
+          publisher_id?: string | null
           slug: string
           status?: string
           version?: string
@@ -420,6 +466,7 @@ export type Database = {
           permissions?: Json
           privacy_classification?: string
           publisher?: string
+          publisher_id?: string | null
           slug?: string
           status?: string
           version?: string
@@ -474,6 +521,47 @@ export type Database = {
           },
         ]
       }
+      org_invites: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          invited_by: string | null
+          org_id: string
+          role: Database["public"]["Enums"]["app_role"]
+          status: string
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          invited_by?: string | null
+          org_id: string
+          role?: Database["public"]["Enums"]["app_role"]
+          status?: string
+          token?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          invited_by?: string | null
+          org_id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          status?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_invites_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           center_lat: number
@@ -483,6 +571,7 @@ export type Database = {
           id: string
           name: string
           slug: string
+          status: string
         }
         Insert: {
           center_lat?: number
@@ -492,6 +581,7 @@ export type Database = {
           id?: string
           name: string
           slug: string
+          status?: string
         }
         Update: {
           center_lat?: number
@@ -501,6 +591,7 @@ export type Database = {
           id?: string
           name?: string
           slug?: string
+          status?: string
         }
         Relationships: []
       }
@@ -510,6 +601,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          intended_portal: string
           updated_at: string
         }
         Insert: {
@@ -517,6 +609,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id: string
+          intended_portal?: string
           updated_at?: string
         }
         Update: {
@@ -524,9 +617,145 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          intended_portal?: string
           updated_at?: string
         }
         Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          format: string
+          generated_by: string | null
+          id: string
+          kind: string
+          org_id: string
+          payload: Json
+          period_end: string | null
+          period_start: string | null
+        }
+        Insert: {
+          created_at?: string
+          format?: string
+          generated_by?: string | null
+          id?: string
+          kind: string
+          org_id: string
+          payload?: Json
+          period_end?: string | null
+          period_start?: string | null
+        }
+        Update: {
+          created_at?: string
+          format?: string
+          generated_by?: string | null
+          id?: string
+          kind?: string
+          org_id?: string
+          payload?: Json
+          period_end?: string | null
+          period_start?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resources: {
+        Row: {
+          created_at: string
+          id: string
+          location_geojson: Json | null
+          metadata: Json
+          name: string
+          org_id: string
+          quantity: number
+          resource_type: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location_geojson?: Json | null
+          metadata?: Json
+          name: string
+          org_id: string
+          quantity?: number
+          resource_type: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location_geojson?: Json | null
+          metadata?: Json
+          name?: string
+          org_id?: string
+          quantity?: number
+          resource_type?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resources_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      response_plans: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          name: string
+          org_id: string
+          plan: Json
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          org_id: string
+          plan?: Json
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          plan?: Json
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "response_plans_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       river_gauges: {
         Row: {
