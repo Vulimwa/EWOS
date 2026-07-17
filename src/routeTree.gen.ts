@@ -13,6 +13,7 @@ import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as PortalRouteRouteImport } from './routes/portal/route'
 import { Route as PortalIndexRouteImport } from './routes/portal/index'
+import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as PortalUsersRouteImport } from './routes/portal/users'
 import { Route as PortalReportsRouteImport } from './routes/portal/reports'
 import { Route as PortalNotificationsRouteImport } from './routes/portal/notifications'
@@ -21,6 +22,9 @@ import { Route as PortalHierarchyRouteImport } from './routes/portal/hierarchy'
 import { Route as PortalAssistantRouteImport } from './routes/portal/assistant'
 import { Route as PortalAssetsRouteImport } from './routes/portal/assets'
 import { Route as PortalAnalyticsRouteImport } from './routes/portal/analytics'
+import { Route as AuthOrganizationRouteImport } from './routes/auth.organization'
+import { Route as AuthDeveloperRouteImport } from './routes/auth.developer'
+import { Route as AuthAdminRouteImport } from './routes/auth.admin'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const WorkspaceRoute = WorkspaceRouteImport.update({
@@ -42,6 +46,11 @@ const PortalIndexRoute = PortalIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PortalRouteRoute,
+} as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
+  id: '/auth/',
+  path: '/auth/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const PortalUsersRoute = PortalUsersRouteImport.update({
   id: '/users',
@@ -83,6 +92,21 @@ const PortalAnalyticsRoute = PortalAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => PortalRouteRoute,
 } as any)
+const AuthOrganizationRoute = AuthOrganizationRouteImport.update({
+  id: '/auth/organization',
+  path: '/auth/organization',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthDeveloperRoute = AuthDeveloperRouteImport.update({
+  id: '/auth/developer',
+  path: '/auth/developer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthAdminRoute = AuthAdminRouteImport.update({
+  id: '/auth/admin',
+  path: '/auth/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -94,6 +118,9 @@ export interface FileRoutesByFullPath {
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
   '/api/chat': typeof ApiChatRoute
+  '/auth/admin': typeof AuthAdminRoute
+  '/auth/developer': typeof AuthDeveloperRoute
+  '/auth/organization': typeof AuthOrganizationRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
   '/portal/assistant': typeof PortalAssistantRoute
@@ -102,12 +129,16 @@ export interface FileRoutesByFullPath {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
+  '/auth/': typeof AuthIndexRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRoutesByTo {
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
   '/api/chat': typeof ApiChatRoute
+  '/auth/admin': typeof AuthAdminRoute
+  '/auth/developer': typeof AuthDeveloperRoute
+  '/auth/organization': typeof AuthOrganizationRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
   '/portal/assistant': typeof PortalAssistantRoute
@@ -116,6 +147,7 @@ export interface FileRoutesByTo {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
+  '/auth': typeof AuthIndexRoute
   '/portal': typeof PortalIndexRoute
 }
 export interface FileRoutesById {
@@ -124,6 +156,9 @@ export interface FileRoutesById {
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
   '/api/chat': typeof ApiChatRoute
+  '/auth/admin': typeof AuthAdminRoute
+  '/auth/developer': typeof AuthDeveloperRoute
+  '/auth/organization': typeof AuthOrganizationRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
   '/portal/assistant': typeof PortalAssistantRoute
@@ -132,6 +167,7 @@ export interface FileRoutesById {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
+  '/auth/': typeof AuthIndexRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRouteTypes {
@@ -141,6 +177,9 @@ export interface FileRouteTypes {
     | '/store'
     | '/workspace'
     | '/api/chat'
+    | '/auth/admin'
+    | '/auth/developer'
+    | '/auth/organization'
     | '/portal/analytics'
     | '/portal/assets'
     | '/portal/assistant'
@@ -149,12 +188,16 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
+    | '/auth/'
     | '/portal/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/store'
     | '/workspace'
     | '/api/chat'
+    | '/auth/admin'
+    | '/auth/developer'
+    | '/auth/organization'
     | '/portal/analytics'
     | '/portal/assets'
     | '/portal/assistant'
@@ -163,6 +206,7 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
+    | '/auth'
     | '/portal'
   id:
     | '__root__'
@@ -170,6 +214,9 @@ export interface FileRouteTypes {
     | '/store'
     | '/workspace'
     | '/api/chat'
+    | '/auth/admin'
+    | '/auth/developer'
+    | '/auth/organization'
     | '/portal/analytics'
     | '/portal/assets'
     | '/portal/assistant'
@@ -178,6 +225,7 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
+    | '/auth/'
     | '/portal/'
   fileRoutesById: FileRoutesById
 }
@@ -186,6 +234,10 @@ export interface RootRouteChildren {
   StoreRoute: typeof StoreRoute
   WorkspaceRoute: typeof WorkspaceRoute
   ApiChatRoute: typeof ApiChatRoute
+  AuthAdminRoute: typeof AuthAdminRoute
+  AuthDeveloperRoute: typeof AuthDeveloperRoute
+  AuthOrganizationRoute: typeof AuthOrganizationRoute
+  AuthIndexRoute: typeof AuthIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -217,6 +269,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/'
       preLoaderRoute: typeof PortalIndexRouteImport
       parentRoute: typeof PortalRouteRoute
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/auth'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/portal/users': {
       id: '/portal/users'
@@ -274,6 +333,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalAnalyticsRouteImport
       parentRoute: typeof PortalRouteRoute
     }
+    '/auth/organization': {
+      id: '/auth/organization'
+      path: '/auth/organization'
+      fullPath: '/auth/organization'
+      preLoaderRoute: typeof AuthOrganizationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/developer': {
+      id: '/auth/developer'
+      path: '/auth/developer'
+      fullPath: '/auth/developer'
+      preLoaderRoute: typeof AuthDeveloperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/admin': {
+      id: '/auth/admin'
+      path: '/auth/admin'
+      fullPath: '/auth/admin'
+      preLoaderRoute: typeof AuthAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -317,6 +397,10 @@ const rootRouteChildren: RootRouteChildren = {
   StoreRoute: StoreRoute,
   WorkspaceRoute: WorkspaceRoute,
   ApiChatRoute: ApiChatRoute,
+  AuthAdminRoute: AuthAdminRoute,
+  AuthDeveloperRoute: AuthDeveloperRoute,
+  AuthOrganizationRoute: AuthOrganizationRoute,
+  AuthIndexRoute: AuthIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
