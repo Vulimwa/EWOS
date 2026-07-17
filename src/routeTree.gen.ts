@@ -12,9 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as PortalRouteRouteImport } from './routes/portal/route'
+import { Route as DeveloperRouteRouteImport } from './routes/developer/route'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal/index'
+import { Route as DeveloperIndexRouteImport } from './routes/developer/index'
 import { Route as AuthIndexRouteImport } from './routes/auth.index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PortalUsersRouteImport } from './routes/portal/users'
 import { Route as PortalReportsRouteImport } from './routes/portal/reports'
 import { Route as PortalNotificationsRouteImport } from './routes/portal/notifications'
@@ -43,6 +47,16 @@ const PortalRouteRoute = PortalRouteRouteImport.update({
   path: '/portal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeveloperRouteRoute = DeveloperRouteRouteImport.update({
+  id: '/developer',
+  path: '/developer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -53,10 +67,20 @@ const PortalIndexRoute = PortalIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PortalRouteRoute,
 } as any)
+const DeveloperIndexRoute = DeveloperIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DeveloperRouteRoute,
+} as any)
 const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/auth/',
   path: '/auth/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const PortalUsersRoute = PortalUsersRouteImport.update({
   id: '/users',
@@ -121,6 +145,8 @@ const ApiChatRoute = ApiChatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/developer': typeof DeveloperRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
@@ -136,7 +162,9 @@ export interface FileRoutesByFullPath {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
+  '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/developer/': typeof DeveloperIndexRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRoutesByTo {
@@ -155,12 +183,16 @@ export interface FileRoutesByTo {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
+  '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
+  '/developer': typeof DeveloperIndexRoute
   '/portal': typeof PortalIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/developer': typeof DeveloperRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
@@ -176,13 +208,17 @@ export interface FileRoutesById {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
+  '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/developer/': typeof DeveloperIndexRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/developer'
     | '/portal'
     | '/store'
     | '/workspace'
@@ -198,7 +234,9 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
+    | '/admin/'
     | '/auth/'
+    | '/developer/'
     | '/portal/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -217,11 +255,15 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
+    | '/admin'
     | '/auth'
+    | '/developer'
     | '/portal'
   id:
     | '__root__'
     | '/'
+    | '/admin'
+    | '/developer'
     | '/portal'
     | '/store'
     | '/workspace'
@@ -237,12 +279,16 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
+    | '/admin/'
     | '/auth/'
+    | '/developer/'
     | '/portal/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  DeveloperRouteRoute: typeof DeveloperRouteRouteWithChildren
   PortalRouteRoute: typeof PortalRouteRouteWithChildren
   StoreRoute: typeof StoreRoute
   WorkspaceRoute: typeof WorkspaceRoute
@@ -276,6 +322,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/developer': {
+      id: '/developer'
+      path: '/developer'
+      fullPath: '/developer'
+      preLoaderRoute: typeof DeveloperRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -290,12 +350,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalIndexRouteImport
       parentRoute: typeof PortalRouteRoute
     }
+    '/developer/': {
+      id: '/developer/'
+      path: '/'
+      fullPath: '/developer/'
+      preLoaderRoute: typeof DeveloperIndexRouteImport
+      parentRoute: typeof DeveloperRouteRoute
+    }
     '/auth/': {
       id: '/auth/'
       path: '/auth'
       fullPath: '/auth/'
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/portal/users': {
       id: '/portal/users'
@@ -384,6 +458,30 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
+interface DeveloperRouteRouteChildren {
+  DeveloperIndexRoute: typeof DeveloperIndexRoute
+}
+
+const DeveloperRouteRouteChildren: DeveloperRouteRouteChildren = {
+  DeveloperIndexRoute: DeveloperIndexRoute,
+}
+
+const DeveloperRouteRouteWithChildren = DeveloperRouteRoute._addFileChildren(
+  DeveloperRouteRouteChildren,
+)
+
 interface PortalRouteRouteChildren {
   PortalAnalyticsRoute: typeof PortalAnalyticsRoute
   PortalAssetsRoute: typeof PortalAssetsRoute
@@ -414,6 +512,8 @@ const PortalRouteRouteWithChildren = PortalRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
+  DeveloperRouteRoute: DeveloperRouteRouteWithChildren,
   PortalRouteRoute: PortalRouteRouteWithChildren,
   StoreRoute: StoreRoute,
   WorkspaceRoute: WorkspaceRoute,
