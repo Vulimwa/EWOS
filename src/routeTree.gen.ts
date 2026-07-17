@@ -9,11 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as PortalRouteRouteImport } from './routes/portal/route'
 import { Route as PortalIndexRouteImport } from './routes/portal/index'
-import { Route as PortalWorkspaceRouteImport } from './routes/portal/workspace'
 import { Route as PortalUsersRouteImport } from './routes/portal/users'
 import { Route as PortalReportsRouteImport } from './routes/portal/reports'
 import { Route as PortalNotificationsRouteImport } from './routes/portal/notifications'
@@ -24,6 +24,11 @@ import { Route as PortalAssetsRouteImport } from './routes/portal/assets'
 import { Route as PortalAnalyticsRouteImport } from './routes/portal/analytics'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
+const WorkspaceRoute = WorkspaceRouteImport.update({
+  id: '/workspace',
+  path: '/workspace',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StoreRoute = StoreRouteImport.update({
   id: '/store',
   path: '/store',
@@ -42,11 +47,6 @@ const PortalRouteRoute = PortalRouteRouteImport.update({
 const PortalIndexRoute = PortalIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => PortalRouteRoute,
-} as any)
-const PortalWorkspaceRoute = PortalWorkspaceRouteImport.update({
-  id: '/workspace',
-  path: '/workspace',
   getParentRoute: () => PortalRouteRoute,
 } as any)
 const PortalUsersRoute = PortalUsersRouteImport.update({
@@ -99,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/portal': typeof PortalRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
+  '/workspace': typeof WorkspaceRoute
   '/api/chat': typeof ApiChatRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
@@ -108,12 +109,12 @@ export interface FileRoutesByFullPath {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
-  '/portal/workspace': typeof PortalWorkspaceRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
+  '/workspace': typeof WorkspaceRoute
   '/api/chat': typeof ApiChatRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
@@ -123,7 +124,6 @@ export interface FileRoutesByTo {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
-  '/portal/workspace': typeof PortalWorkspaceRoute
   '/portal': typeof PortalIndexRoute
 }
 export interface FileRoutesById {
@@ -131,6 +131,7 @@ export interface FileRoutesById {
   '/portal': typeof PortalRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/store': typeof StoreRoute
+  '/workspace': typeof WorkspaceRoute
   '/api/chat': typeof ApiChatRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
@@ -140,7 +141,6 @@ export interface FileRoutesById {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/reports': typeof PortalReportsRoute
   '/portal/users': typeof PortalUsersRoute
-  '/portal/workspace': typeof PortalWorkspaceRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRouteTypes {
@@ -149,6 +149,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/auth'
     | '/store'
+    | '/workspace'
     | '/api/chat'
     | '/portal/analytics'
     | '/portal/assets'
@@ -158,12 +159,12 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
-    | '/portal/workspace'
     | '/portal/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
     | '/store'
+    | '/workspace'
     | '/api/chat'
     | '/portal/analytics'
     | '/portal/assets'
@@ -173,13 +174,13 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
-    | '/portal/workspace'
     | '/portal'
   id:
     | '__root__'
     | '/portal'
     | '/auth'
     | '/store'
+    | '/workspace'
     | '/api/chat'
     | '/portal/analytics'
     | '/portal/assets'
@@ -189,7 +190,6 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/reports'
     | '/portal/users'
-    | '/portal/workspace'
     | '/portal/'
   fileRoutesById: FileRoutesById
 }
@@ -197,11 +197,19 @@ export interface RootRouteChildren {
   PortalRouteRoute: typeof PortalRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   StoreRoute: typeof StoreRoute
+  WorkspaceRoute: typeof WorkspaceRoute
   ApiChatRoute: typeof ApiChatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/workspace': {
+      id: '/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof WorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/store': {
       id: '/store'
       path: '/store'
@@ -228,13 +236,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/portal/'
       preLoaderRoute: typeof PortalIndexRouteImport
-      parentRoute: typeof PortalRouteRoute
-    }
-    '/portal/workspace': {
-      id: '/portal/workspace'
-      path: '/workspace'
-      fullPath: '/portal/workspace'
-      preLoaderRoute: typeof PortalWorkspaceRouteImport
       parentRoute: typeof PortalRouteRoute
     }
     '/portal/users': {
@@ -312,7 +313,6 @@ interface PortalRouteRouteChildren {
   PortalNotificationsRoute: typeof PortalNotificationsRoute
   PortalReportsRoute: typeof PortalReportsRoute
   PortalUsersRoute: typeof PortalUsersRoute
-  PortalWorkspaceRoute: typeof PortalWorkspaceRoute
   PortalIndexRoute: typeof PortalIndexRoute
 }
 
@@ -325,7 +325,6 @@ const PortalRouteRouteChildren: PortalRouteRouteChildren = {
   PortalNotificationsRoute: PortalNotificationsRoute,
   PortalReportsRoute: PortalReportsRoute,
   PortalUsersRoute: PortalUsersRoute,
-  PortalWorkspaceRoute: PortalWorkspaceRoute,
   PortalIndexRoute: PortalIndexRoute,
 }
 
@@ -337,6 +336,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortalRouteRoute: PortalRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   StoreRoute: StoreRoute,
+  WorkspaceRoute: WorkspaceRoute,
   ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
