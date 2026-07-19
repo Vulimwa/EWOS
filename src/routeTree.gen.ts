@@ -18,6 +18,7 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal/index'
 import { Route as DeveloperIndexRouteImport } from './routes/developer/index'
+import { Route as CitizenIndexRouteImport } from './routes/citizen/index'
 import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PortalUsersRouteImport } from './routes/portal/users'
@@ -89,6 +90,11 @@ const DeveloperIndexRoute = DeveloperIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DeveloperRouteRoute,
+} as any)
+const CitizenIndexRoute = CitizenIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CitizenRouteRoute,
 } as any)
 const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/auth/',
@@ -224,7 +230,7 @@ const AdminAiRoute = AdminAiRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/citizen': typeof CitizenRouteRoute
+  '/citizen': typeof CitizenRouteRouteWithChildren
   '/developer': typeof DeveloperRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
   '/store': typeof StoreRoute
@@ -255,12 +261,12 @@ export interface FileRoutesByFullPath {
   '/portal/users': typeof PortalUsersRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/citizen/': typeof CitizenIndexRoute
   '/developer/': typeof DeveloperIndexRoute
   '/portal/': typeof PortalIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/citizen': typeof CitizenRouteRoute
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/ai': typeof AdminAiRoute
@@ -289,6 +295,7 @@ export interface FileRoutesByTo {
   '/portal/users': typeof PortalUsersRoute
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
+  '/citizen': typeof CitizenIndexRoute
   '/developer': typeof DeveloperIndexRoute
   '/portal': typeof PortalIndexRoute
 }
@@ -296,7 +303,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/citizen': typeof CitizenRouteRoute
+  '/citizen': typeof CitizenRouteRouteWithChildren
   '/developer': typeof DeveloperRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
   '/store': typeof StoreRoute
@@ -327,6 +334,7 @@ export interface FileRoutesById {
   '/portal/users': typeof PortalUsersRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/citizen/': typeof CitizenIndexRoute
   '/developer/': typeof DeveloperIndexRoute
   '/portal/': typeof PortalIndexRoute
 }
@@ -366,12 +374,12 @@ export interface FileRouteTypes {
     | '/portal/users'
     | '/admin/'
     | '/auth/'
+    | '/citizen/'
     | '/developer/'
     | '/portal/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/citizen'
     | '/store'
     | '/workspace'
     | '/admin/ai'
@@ -400,6 +408,7 @@ export interface FileRouteTypes {
     | '/portal/users'
     | '/admin'
     | '/auth'
+    | '/citizen'
     | '/developer'
     | '/portal'
   id:
@@ -437,6 +446,7 @@ export interface FileRouteTypes {
     | '/portal/users'
     | '/admin/'
     | '/auth/'
+    | '/citizen/'
     | '/developer/'
     | '/portal/'
   fileRoutesById: FileRoutesById
@@ -444,7 +454,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
-  CitizenRouteRoute: typeof CitizenRouteRoute
+  CitizenRouteRoute: typeof CitizenRouteRouteWithChildren
   DeveloperRouteRoute: typeof DeveloperRouteRouteWithChildren
   PortalRouteRoute: typeof PortalRouteRouteWithChildren
   StoreRoute: typeof StoreRoute
@@ -521,6 +531,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/developer/'
       preLoaderRoute: typeof DeveloperIndexRouteImport
       parentRoute: typeof DeveloperRouteRoute
+    }
+    '/citizen/': {
+      id: '/citizen/'
+      path: '/'
+      fullPath: '/citizen/'
+      preLoaderRoute: typeof CitizenIndexRouteImport
+      parentRoute: typeof CitizenRouteRoute
     }
     '/auth/': {
       id: '/auth/'
@@ -727,6 +744,18 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface CitizenRouteRouteChildren {
+  CitizenIndexRoute: typeof CitizenIndexRoute
+}
+
+const CitizenRouteRouteChildren: CitizenRouteRouteChildren = {
+  CitizenIndexRoute: CitizenIndexRoute,
+}
+
+const CitizenRouteRouteWithChildren = CitizenRouteRoute._addFileChildren(
+  CitizenRouteRouteChildren,
+)
+
 interface DeveloperRouteRouteChildren {
   DeveloperAnalyticsRoute: typeof DeveloperAnalyticsRoute
   DeveloperApiRoute: typeof DeveloperApiRoute
@@ -784,7 +813,7 @@ const PortalRouteRouteWithChildren = PortalRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
-  CitizenRouteRoute: CitizenRouteRoute,
+  CitizenRouteRoute: CitizenRouteRouteWithChildren,
   DeveloperRouteRoute: DeveloperRouteRouteWithChildren,
   PortalRouteRoute: PortalRouteRouteWithChildren,
   StoreRoute: StoreRoute,
