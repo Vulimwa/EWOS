@@ -36,6 +36,7 @@ import { Route as DeveloperApiRouteImport } from './routes/developer/api'
 import { Route as DeveloperAnalyticsRouteImport } from './routes/developer/analytics'
 import { Route as AuthOrganizationRouteImport } from './routes/auth.organization'
 import { Route as AuthDeveloperRouteImport } from './routes/auth.developer'
+import { Route as AuthCitizenRouteImport } from './routes/auth.citizen'
 import { Route as AuthAdminRouteImport } from './routes/auth.admin'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
@@ -178,6 +179,11 @@ const AuthDeveloperRoute = AuthDeveloperRouteImport.update({
   path: '/auth/developer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCitizenRoute = AuthCitizenRouteImport.update({
+  id: '/auth/citizen',
+  path: '/auth/citizen',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthAdminRoute = AuthAdminRouteImport.update({
   id: '/auth/admin',
   path: '/auth/admin',
@@ -222,6 +228,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
   '/auth/admin': typeof AuthAdminRoute
+  '/auth/citizen': typeof AuthCitizenRoute
   '/auth/developer': typeof AuthDeveloperRoute
   '/auth/organization': typeof AuthOrganizationRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
@@ -254,6 +261,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
   '/auth/admin': typeof AuthAdminRoute
+  '/auth/citizen': typeof AuthCitizenRoute
   '/auth/developer': typeof AuthDeveloperRoute
   '/auth/organization': typeof AuthOrganizationRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
@@ -290,6 +298,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
   '/auth/admin': typeof AuthAdminRoute
+  '/auth/citizen': typeof AuthCitizenRoute
   '/auth/developer': typeof AuthDeveloperRoute
   '/auth/organization': typeof AuthOrganizationRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
@@ -327,6 +336,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/api/chat'
     | '/auth/admin'
+    | '/auth/citizen'
     | '/auth/developer'
     | '/auth/organization'
     | '/developer/analytics'
@@ -359,6 +369,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/api/chat'
     | '/auth/admin'
+    | '/auth/citizen'
     | '/auth/developer'
     | '/auth/organization'
     | '/developer/analytics'
@@ -394,6 +405,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/api/chat'
     | '/auth/admin'
+    | '/auth/citizen'
     | '/auth/developer'
     | '/auth/organization'
     | '/developer/analytics'
@@ -426,6 +438,7 @@ export interface RootRouteChildren {
   WorkspaceRoute: typeof WorkspaceRoute
   ApiChatRoute: typeof ApiChatRoute
   AuthAdminRoute: typeof AuthAdminRoute
+  AuthCitizenRoute: typeof AuthCitizenRoute
   AuthDeveloperRoute: typeof AuthDeveloperRoute
   AuthOrganizationRoute: typeof AuthOrganizationRoute
   AuthIndexRoute: typeof AuthIndexRoute
@@ -622,6 +635,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDeveloperRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/citizen': {
+      id: '/auth/citizen'
+      path: '/auth/citizen'
+      fullPath: '/auth/citizen'
+      preLoaderRoute: typeof AuthCitizenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/admin': {
       id: '/auth/admin'
       path: '/auth/admin'
@@ -750,6 +770,7 @@ const rootRouteChildren: RootRouteChildren = {
   WorkspaceRoute: WorkspaceRoute,
   ApiChatRoute: ApiChatRoute,
   AuthAdminRoute: AuthAdminRoute,
+  AuthCitizenRoute: AuthCitizenRoute,
   AuthDeveloperRoute: AuthDeveloperRoute,
   AuthOrganizationRoute: AuthOrganizationRoute,
   AuthIndexRoute: AuthIndexRoute,
