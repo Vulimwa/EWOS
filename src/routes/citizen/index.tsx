@@ -46,7 +46,7 @@ function CitizenDashboard() {
         <ul className="divide-y divide-border">
           {(events ?? []).map((e) => (
             <li key={e.id} className="flex items-center gap-3 px-4 py-3 text-sm">
-              <SeverityBadge severity={(e.severity ?? "info") as "info" | "advisory" | "watch" | "warning" | "emergency"} />
+              <SeverityBadge severity={e.severity ?? "advisory"} />
               <div className="min-w-0 flex-1">
                 <p className="truncate font-medium">{e.topic}</p>
                 <p className="truncate text-xs text-muted-foreground">
