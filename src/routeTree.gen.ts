@@ -37,6 +37,8 @@ import { Route as DeveloperEventsRouteImport } from './routes/developer/events'
 import { Route as DeveloperApiRouteImport } from './routes/developer/api'
 import { Route as DeveloperAnalyticsRouteImport } from './routes/developer/analytics'
 import { Route as CitizenReportRouteImport } from './routes/citizen/report'
+import { Route as CitizenNotificationsRouteImport } from './routes/citizen/notifications'
+import { Route as CitizenAssistantRouteImport } from './routes/citizen/assistant'
 import { Route as CitizenAlertsRouteImport } from './routes/citizen/alerts'
 import { Route as AuthOrganizationRouteImport } from './routes/auth.organization'
 import { Route as AuthDeveloperRouteImport } from './routes/auth.developer'
@@ -188,6 +190,16 @@ const CitizenReportRoute = CitizenReportRouteImport.update({
   path: '/report',
   getParentRoute: () => CitizenRouteRoute,
 } as any)
+const CitizenNotificationsRoute = CitizenNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => CitizenRouteRoute,
+} as any)
+const CitizenAssistantRoute = CitizenAssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => CitizenRouteRoute,
+} as any)
 const CitizenAlertsRoute = CitizenAlertsRouteImport.update({
   id: '/alerts',
   path: '/alerts',
@@ -257,6 +269,8 @@ export interface FileRoutesByFullPath {
   '/auth/developer': typeof AuthDeveloperRoute
   '/auth/organization': typeof AuthOrganizationRoute
   '/citizen/alerts': typeof CitizenAlertsRoute
+  '/citizen/assistant': typeof CitizenAssistantRoute
+  '/citizen/notifications': typeof CitizenNotificationsRoute
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
@@ -293,6 +307,8 @@ export interface FileRoutesByTo {
   '/auth/developer': typeof AuthDeveloperRoute
   '/auth/organization': typeof AuthOrganizationRoute
   '/citizen/alerts': typeof CitizenAlertsRoute
+  '/citizen/assistant': typeof CitizenAssistantRoute
+  '/citizen/notifications': typeof CitizenNotificationsRoute
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
@@ -334,6 +350,8 @@ export interface FileRoutesById {
   '/auth/developer': typeof AuthDeveloperRoute
   '/auth/organization': typeof AuthOrganizationRoute
   '/citizen/alerts': typeof CitizenAlertsRoute
+  '/citizen/assistant': typeof CitizenAssistantRoute
+  '/citizen/notifications': typeof CitizenNotificationsRoute
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
@@ -376,6 +394,8 @@ export interface FileRouteTypes {
     | '/auth/developer'
     | '/auth/organization'
     | '/citizen/alerts'
+    | '/citizen/assistant'
+    | '/citizen/notifications'
     | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
@@ -412,6 +432,8 @@ export interface FileRouteTypes {
     | '/auth/developer'
     | '/auth/organization'
     | '/citizen/alerts'
+    | '/citizen/assistant'
+    | '/citizen/notifications'
     | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
@@ -452,6 +474,8 @@ export interface FileRouteTypes {
     | '/auth/developer'
     | '/auth/organization'
     | '/citizen/alerts'
+    | '/citizen/assistant'
+    | '/citizen/notifications'
     | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
@@ -689,6 +713,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CitizenReportRouteImport
       parentRoute: typeof CitizenRouteRoute
     }
+    '/citizen/notifications': {
+      id: '/citizen/notifications'
+      path: '/notifications'
+      fullPath: '/citizen/notifications'
+      preLoaderRoute: typeof CitizenNotificationsRouteImport
+      parentRoute: typeof CitizenRouteRoute
+    }
+    '/citizen/assistant': {
+      id: '/citizen/assistant'
+      path: '/assistant'
+      fullPath: '/citizen/assistant'
+      preLoaderRoute: typeof CitizenAssistantRouteImport
+      parentRoute: typeof CitizenRouteRoute
+    }
     '/citizen/alerts': {
       id: '/citizen/alerts'
       path: '/alerts'
@@ -784,12 +822,16 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 
 interface CitizenRouteRouteChildren {
   CitizenAlertsRoute: typeof CitizenAlertsRoute
+  CitizenAssistantRoute: typeof CitizenAssistantRoute
+  CitizenNotificationsRoute: typeof CitizenNotificationsRoute
   CitizenReportRoute: typeof CitizenReportRoute
   CitizenIndexRoute: typeof CitizenIndexRoute
 }
 
 const CitizenRouteRouteChildren: CitizenRouteRouteChildren = {
   CitizenAlertsRoute: CitizenAlertsRoute,
+  CitizenAssistantRoute: CitizenAssistantRoute,
+  CitizenNotificationsRoute: CitizenNotificationsRoute,
   CitizenReportRoute: CitizenReportRoute,
   CitizenIndexRoute: CitizenIndexRoute,
 }
