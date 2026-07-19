@@ -3,7 +3,7 @@ import { Radar, ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useMyRoles } from "@/hooks/use-role";
-import { PORTAL_LIST, PORTALS, type PortalId } from "@/lib/portals";
+import { PORTAL_LIST, PORTALS, ORG_ROLES, type PortalId } from "@/lib/portals";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -18,7 +18,7 @@ function LandingPage() {
 
   const rolesSet = new Set((roles ?? []).map((r) => r.role));
   const hasAccess = (id: PortalId) => {
-    if (id === "organization") return rolesSet.size > 0; // any org role works
+    if (id === "organization") return ORG_ROLES.some((r) => rolesSet.has(r));
     return rolesSet.has(PORTALS[id].role);
   };
 
@@ -60,7 +60,7 @@ function LandingPage() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {PORTAL_LIST.map((portal) => {
             const Icon = portal.icon;
             const access = session && hasAccess(portal.id);

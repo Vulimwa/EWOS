@@ -1,10 +1,10 @@
 /** Portal registry — one source of truth for portal-scoped auth, roles, and homes. */
 import type { LucideIcon } from "lucide-react";
-import { Building2, Code2, ShieldCheck } from "lucide-react";
+import { Building2, Code2, ShieldCheck, Users } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
 
 export type AppRole = Database["public"]["Enums"]["app_role"];
-export type PortalId = "organization" | "developer" | "admin";
+export type PortalId = "organization" | "developer" | "admin" | "citizen";
 
 export interface PortalDef {
   id: PortalId;
@@ -32,6 +32,19 @@ export const PORTALS: Record<PortalId, PortalDef> = {
     home: "/portal",
     allowSignup: true,
     role: "viewer",
+  },
+  citizen: {
+    id: "citizen",
+    name: "Citizen Portal",
+    tagline: "Stay informed. Report hazards.",
+    description:
+      "For the public — receive alerts, view live hazards, report incidents, and get AI-guided safety help.",
+    icon: Users,
+    accent: "from-emerald-500/20 to-emerald-500/5",
+    authPath: "/auth/citizen",
+    home: "/citizen",
+    allowSignup: true,
+    role: "citizen",
   },
   developer: {
     id: "developer",
@@ -61,4 +74,12 @@ export const PORTALS: Record<PortalId, PortalDef> = {
   },
 };
 
-export const PORTAL_LIST: PortalDef[] = [PORTALS.organization, PORTALS.developer, PORTALS.admin];
+export const PORTAL_LIST: PortalDef[] = [
+  PORTALS.organization,
+  PORTALS.citizen,
+  PORTALS.developer,
+  PORTALS.admin,
+];
+
+/** Roles that count as access to the organization portal (any operational role). */
+export const ORG_ROLES: AppRole[] = ["viewer", "operator", "admin", "responder"];

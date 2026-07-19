@@ -13,10 +13,12 @@ import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as PortalRouteRouteImport } from './routes/portal/route'
 import { Route as DeveloperRouteRouteImport } from './routes/developer/route'
+import { Route as CitizenRouteRouteImport } from './routes/citizen/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal/index'
 import { Route as DeveloperIndexRouteImport } from './routes/developer/index'
+import { Route as CitizenIndexRouteImport } from './routes/citizen/index'
 import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PortalUsersRouteImport } from './routes/portal/users'
@@ -34,8 +36,13 @@ import { Route as DeveloperMarketplaceRouteImport } from './routes/developer/mar
 import { Route as DeveloperEventsRouteImport } from './routes/developer/events'
 import { Route as DeveloperApiRouteImport } from './routes/developer/api'
 import { Route as DeveloperAnalyticsRouteImport } from './routes/developer/analytics'
+import { Route as CitizenReportRouteImport } from './routes/citizen/report'
+import { Route as CitizenNotificationsRouteImport } from './routes/citizen/notifications'
+import { Route as CitizenAssistantRouteImport } from './routes/citizen/assistant'
+import { Route as CitizenAlertsRouteImport } from './routes/citizen/alerts'
 import { Route as AuthOrganizationRouteImport } from './routes/auth.organization'
 import { Route as AuthDeveloperRouteImport } from './routes/auth.developer'
+import { Route as AuthCitizenRouteImport } from './routes/auth.citizen'
 import { Route as AuthAdminRouteImport } from './routes/auth.admin'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
@@ -63,6 +70,11 @@ const DeveloperRouteRoute = DeveloperRouteRouteImport.update({
   path: '/developer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CitizenRouteRoute = CitizenRouteRouteImport.update({
+  id: '/citizen',
+  path: '/citizen',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -82,6 +94,11 @@ const DeveloperIndexRoute = DeveloperIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DeveloperRouteRoute,
+} as any)
+const CitizenIndexRoute = CitizenIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CitizenRouteRoute,
 } as any)
 const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/auth/',
@@ -168,6 +185,26 @@ const DeveloperAnalyticsRoute = DeveloperAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => DeveloperRouteRoute,
 } as any)
+const CitizenReportRoute = CitizenReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => CitizenRouteRoute,
+} as any)
+const CitizenNotificationsRoute = CitizenNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => CitizenRouteRoute,
+} as any)
+const CitizenAssistantRoute = CitizenAssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => CitizenRouteRoute,
+} as any)
+const CitizenAlertsRoute = CitizenAlertsRouteImport.update({
+  id: '/alerts',
+  path: '/alerts',
+  getParentRoute: () => CitizenRouteRoute,
+} as any)
 const AuthOrganizationRoute = AuthOrganizationRouteImport.update({
   id: '/auth/organization',
   path: '/auth/organization',
@@ -176,6 +213,11 @@ const AuthOrganizationRoute = AuthOrganizationRouteImport.update({
 const AuthDeveloperRoute = AuthDeveloperRouteImport.update({
   id: '/auth/developer',
   path: '/auth/developer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthCitizenRoute = AuthCitizenRouteImport.update({
+  id: '/auth/citizen',
+  path: '/auth/citizen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAdminRoute = AuthAdminRouteImport.update({
@@ -212,6 +254,7 @@ const AdminAiRoute = AdminAiRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/citizen': typeof CitizenRouteRouteWithChildren
   '/developer': typeof DeveloperRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
   '/store': typeof StoreRoute
@@ -222,8 +265,13 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
   '/auth/admin': typeof AuthAdminRoute
+  '/auth/citizen': typeof AuthCitizenRoute
   '/auth/developer': typeof AuthDeveloperRoute
   '/auth/organization': typeof AuthOrganizationRoute
+  '/citizen/alerts': typeof CitizenAlertsRoute
+  '/citizen/assistant': typeof CitizenAssistantRoute
+  '/citizen/notifications': typeof CitizenNotificationsRoute
+  '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
   '/developer/events': typeof DeveloperEventsRoute
@@ -241,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/portal/users': typeof PortalUsersRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/citizen/': typeof CitizenIndexRoute
   '/developer/': typeof DeveloperIndexRoute
   '/portal/': typeof PortalIndexRoute
 }
@@ -254,8 +303,13 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
   '/auth/admin': typeof AuthAdminRoute
+  '/auth/citizen': typeof AuthCitizenRoute
   '/auth/developer': typeof AuthDeveloperRoute
   '/auth/organization': typeof AuthOrganizationRoute
+  '/citizen/alerts': typeof CitizenAlertsRoute
+  '/citizen/assistant': typeof CitizenAssistantRoute
+  '/citizen/notifications': typeof CitizenNotificationsRoute
+  '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
   '/developer/events': typeof DeveloperEventsRoute
@@ -273,6 +327,7 @@ export interface FileRoutesByTo {
   '/portal/users': typeof PortalUsersRoute
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
+  '/citizen': typeof CitizenIndexRoute
   '/developer': typeof DeveloperIndexRoute
   '/portal': typeof PortalIndexRoute
 }
@@ -280,6 +335,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/citizen': typeof CitizenRouteRouteWithChildren
   '/developer': typeof DeveloperRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
   '/store': typeof StoreRoute
@@ -290,8 +346,13 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
   '/auth/admin': typeof AuthAdminRoute
+  '/auth/citizen': typeof AuthCitizenRoute
   '/auth/developer': typeof AuthDeveloperRoute
   '/auth/organization': typeof AuthOrganizationRoute
+  '/citizen/alerts': typeof CitizenAlertsRoute
+  '/citizen/assistant': typeof CitizenAssistantRoute
+  '/citizen/notifications': typeof CitizenNotificationsRoute
+  '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
   '/developer/events': typeof DeveloperEventsRoute
@@ -309,6 +370,7 @@ export interface FileRoutesById {
   '/portal/users': typeof PortalUsersRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/citizen/': typeof CitizenIndexRoute
   '/developer/': typeof DeveloperIndexRoute
   '/portal/': typeof PortalIndexRoute
 }
@@ -317,6 +379,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/citizen'
     | '/developer'
     | '/portal'
     | '/store'
@@ -327,8 +390,13 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/api/chat'
     | '/auth/admin'
+    | '/auth/citizen'
     | '/auth/developer'
     | '/auth/organization'
+    | '/citizen/alerts'
+    | '/citizen/assistant'
+    | '/citizen/notifications'
+    | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
     | '/developer/events'
@@ -346,6 +414,7 @@ export interface FileRouteTypes {
     | '/portal/users'
     | '/admin/'
     | '/auth/'
+    | '/citizen/'
     | '/developer/'
     | '/portal/'
   fileRoutesByTo: FileRoutesByTo
@@ -359,8 +428,13 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/api/chat'
     | '/auth/admin'
+    | '/auth/citizen'
     | '/auth/developer'
     | '/auth/organization'
+    | '/citizen/alerts'
+    | '/citizen/assistant'
+    | '/citizen/notifications'
+    | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
     | '/developer/events'
@@ -378,12 +452,14 @@ export interface FileRouteTypes {
     | '/portal/users'
     | '/admin'
     | '/auth'
+    | '/citizen'
     | '/developer'
     | '/portal'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/citizen'
     | '/developer'
     | '/portal'
     | '/store'
@@ -394,8 +470,13 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/api/chat'
     | '/auth/admin'
+    | '/auth/citizen'
     | '/auth/developer'
     | '/auth/organization'
+    | '/citizen/alerts'
+    | '/citizen/assistant'
+    | '/citizen/notifications'
+    | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
     | '/developer/events'
@@ -413,6 +494,7 @@ export interface FileRouteTypes {
     | '/portal/users'
     | '/admin/'
     | '/auth/'
+    | '/citizen/'
     | '/developer/'
     | '/portal/'
   fileRoutesById: FileRoutesById
@@ -420,12 +502,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  CitizenRouteRoute: typeof CitizenRouteRouteWithChildren
   DeveloperRouteRoute: typeof DeveloperRouteRouteWithChildren
   PortalRouteRoute: typeof PortalRouteRouteWithChildren
   StoreRoute: typeof StoreRoute
   WorkspaceRoute: typeof WorkspaceRoute
   ApiChatRoute: typeof ApiChatRoute
   AuthAdminRoute: typeof AuthAdminRoute
+  AuthCitizenRoute: typeof AuthCitizenRoute
   AuthDeveloperRoute: typeof AuthDeveloperRoute
   AuthOrganizationRoute: typeof AuthOrganizationRoute
   AuthIndexRoute: typeof AuthIndexRoute
@@ -461,6 +545,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeveloperRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/citizen': {
+      id: '/citizen'
+      path: '/citizen'
+      fullPath: '/citizen'
+      preLoaderRoute: typeof CitizenRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -488,6 +579,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/developer/'
       preLoaderRoute: typeof DeveloperIndexRouteImport
       parentRoute: typeof DeveloperRouteRoute
+    }
+    '/citizen/': {
+      id: '/citizen/'
+      path: '/'
+      fullPath: '/citizen/'
+      preLoaderRoute: typeof CitizenIndexRouteImport
+      parentRoute: typeof CitizenRouteRoute
     }
     '/auth/': {
       id: '/auth/'
@@ -608,6 +706,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeveloperAnalyticsRouteImport
       parentRoute: typeof DeveloperRouteRoute
     }
+    '/citizen/report': {
+      id: '/citizen/report'
+      path: '/report'
+      fullPath: '/citizen/report'
+      preLoaderRoute: typeof CitizenReportRouteImport
+      parentRoute: typeof CitizenRouteRoute
+    }
+    '/citizen/notifications': {
+      id: '/citizen/notifications'
+      path: '/notifications'
+      fullPath: '/citizen/notifications'
+      preLoaderRoute: typeof CitizenNotificationsRouteImport
+      parentRoute: typeof CitizenRouteRoute
+    }
+    '/citizen/assistant': {
+      id: '/citizen/assistant'
+      path: '/assistant'
+      fullPath: '/citizen/assistant'
+      preLoaderRoute: typeof CitizenAssistantRouteImport
+      parentRoute: typeof CitizenRouteRoute
+    }
+    '/citizen/alerts': {
+      id: '/citizen/alerts'
+      path: '/alerts'
+      fullPath: '/citizen/alerts'
+      preLoaderRoute: typeof CitizenAlertsRouteImport
+      parentRoute: typeof CitizenRouteRoute
+    }
     '/auth/organization': {
       id: '/auth/organization'
       path: '/auth/organization'
@@ -620,6 +746,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/developer'
       fullPath: '/auth/developer'
       preLoaderRoute: typeof AuthDeveloperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/citizen': {
+      id: '/auth/citizen'
+      path: '/auth/citizen'
+      fullPath: '/auth/citizen'
+      preLoaderRoute: typeof AuthCitizenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/admin': {
@@ -687,6 +820,26 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface CitizenRouteRouteChildren {
+  CitizenAlertsRoute: typeof CitizenAlertsRoute
+  CitizenAssistantRoute: typeof CitizenAssistantRoute
+  CitizenNotificationsRoute: typeof CitizenNotificationsRoute
+  CitizenReportRoute: typeof CitizenReportRoute
+  CitizenIndexRoute: typeof CitizenIndexRoute
+}
+
+const CitizenRouteRouteChildren: CitizenRouteRouteChildren = {
+  CitizenAlertsRoute: CitizenAlertsRoute,
+  CitizenAssistantRoute: CitizenAssistantRoute,
+  CitizenNotificationsRoute: CitizenNotificationsRoute,
+  CitizenReportRoute: CitizenReportRoute,
+  CitizenIndexRoute: CitizenIndexRoute,
+}
+
+const CitizenRouteRouteWithChildren = CitizenRouteRoute._addFileChildren(
+  CitizenRouteRouteChildren,
+)
+
 interface DeveloperRouteRouteChildren {
   DeveloperAnalyticsRoute: typeof DeveloperAnalyticsRoute
   DeveloperApiRoute: typeof DeveloperApiRoute
@@ -744,12 +897,14 @@ const PortalRouteRouteWithChildren = PortalRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  CitizenRouteRoute: CitizenRouteRouteWithChildren,
   DeveloperRouteRoute: DeveloperRouteRouteWithChildren,
   PortalRouteRoute: PortalRouteRouteWithChildren,
   StoreRoute: StoreRoute,
   WorkspaceRoute: WorkspaceRoute,
   ApiChatRoute: ApiChatRoute,
   AuthAdminRoute: AuthAdminRoute,
+  AuthCitizenRoute: AuthCitizenRoute,
   AuthDeveloperRoute: AuthDeveloperRoute,
   AuthOrganizationRoute: AuthOrganizationRoute,
   AuthIndexRoute: AuthIndexRoute,
