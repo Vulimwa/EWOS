@@ -31,9 +31,6 @@ import { Route as PortalAssetsRouteImport } from './routes/portal/assets'
 import { Route as PortalAnalyticsRouteImport } from './routes/portal/analytics'
 import { Route as DeveloperSdkRouteImport } from './routes/developer/sdk'
 import { Route as DeveloperSandboxRouteImport } from './routes/developer/sandbox'
-import { Route as DeveloperPluginsRouteImport } from './routes/developer/plugins'
-import { Route as DeveloperMarketplaceRouteImport } from './routes/developer/marketplace'
-import { Route as DeveloperEventsRouteImport } from './routes/developer/events'
 import { Route as DeveloperApiRouteImport } from './routes/developer/api'
 import { Route as DeveloperAnalyticsRouteImport } from './routes/developer/analytics'
 import { Route as CitizenReportRouteImport } from './routes/citizen/report'
@@ -45,10 +42,7 @@ import { Route as AuthDeveloperRouteImport } from './routes/auth.developer'
 import { Route as AuthCitizenRouteImport } from './routes/auth.citizen'
 import { Route as AuthAdminRouteImport } from './routes/auth.admin'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
-import { Route as AdminUsersRouteImport } from './routes/admin/users'
-import { Route as AdminMarketplaceRouteImport } from './routes/admin/marketplace'
 import { Route as AdminInfrastructureRouteImport } from './routes/admin/infrastructure'
-import { Route as AdminAiRouteImport } from './routes/admin/ai'
 
 const WorkspaceRoute = WorkspaceRouteImport.update({
   id: '/workspace',
@@ -160,21 +154,6 @@ const DeveloperSandboxRoute = DeveloperSandboxRouteImport.update({
   path: '/sandbox',
   getParentRoute: () => DeveloperRouteRoute,
 } as any)
-const DeveloperPluginsRoute = DeveloperPluginsRouteImport.update({
-  id: '/plugins',
-  path: '/plugins',
-  getParentRoute: () => DeveloperRouteRoute,
-} as any)
-const DeveloperMarketplaceRoute = DeveloperMarketplaceRouteImport.update({
-  id: '/marketplace',
-  path: '/marketplace',
-  getParentRoute: () => DeveloperRouteRoute,
-} as any)
-const DeveloperEventsRoute = DeveloperEventsRouteImport.update({
-  id: '/events',
-  path: '/events',
-  getParentRoute: () => DeveloperRouteRoute,
-} as any)
 const DeveloperApiRoute = DeveloperApiRouteImport.update({
   id: '/api',
   path: '/api',
@@ -230,24 +209,9 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminUsersRoute = AdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminMarketplaceRoute = AdminMarketplaceRouteImport.update({
-  id: '/marketplace',
-  path: '/marketplace',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
 const AdminInfrastructureRoute = AdminInfrastructureRouteImport.update({
   id: '/infrastructure',
   path: '/infrastructure',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminAiRoute = AdminAiRouteImport.update({
-  id: '/ai',
-  path: '/ai',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 
@@ -259,10 +223,7 @@ export interface FileRoutesByFullPath {
   '/portal': typeof PortalRouteRouteWithChildren
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
-  '/admin/ai': typeof AdminAiRoute
   '/admin/infrastructure': typeof AdminInfrastructureRoute
-  '/admin/marketplace': typeof AdminMarketplaceRoute
-  '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
   '/auth/admin': typeof AuthAdminRoute
   '/auth/citizen': typeof AuthCitizenRoute
@@ -274,9 +235,6 @@ export interface FileRoutesByFullPath {
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
-  '/developer/events': typeof DeveloperEventsRoute
-  '/developer/marketplace': typeof DeveloperMarketplaceRoute
-  '/developer/plugins': typeof DeveloperPluginsRoute
   '/developer/sandbox': typeof DeveloperSandboxRoute
   '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
@@ -297,10 +255,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
-  '/admin/ai': typeof AdminAiRoute
   '/admin/infrastructure': typeof AdminInfrastructureRoute
-  '/admin/marketplace': typeof AdminMarketplaceRoute
-  '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
   '/auth/admin': typeof AuthAdminRoute
   '/auth/citizen': typeof AuthCitizenRoute
@@ -312,9 +267,6 @@ export interface FileRoutesByTo {
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
-  '/developer/events': typeof DeveloperEventsRoute
-  '/developer/marketplace': typeof DeveloperMarketplaceRoute
-  '/developer/plugins': typeof DeveloperPluginsRoute
   '/developer/sandbox': typeof DeveloperSandboxRoute
   '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
@@ -340,10 +292,7 @@ export interface FileRoutesById {
   '/portal': typeof PortalRouteRouteWithChildren
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
-  '/admin/ai': typeof AdminAiRoute
   '/admin/infrastructure': typeof AdminInfrastructureRoute
-  '/admin/marketplace': typeof AdminMarketplaceRoute
-  '/admin/users': typeof AdminUsersRoute
   '/api/chat': typeof ApiChatRoute
   '/auth/admin': typeof AuthAdminRoute
   '/auth/citizen': typeof AuthCitizenRoute
@@ -355,9 +304,6 @@ export interface FileRoutesById {
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
-  '/developer/events': typeof DeveloperEventsRoute
-  '/developer/marketplace': typeof DeveloperMarketplaceRoute
-  '/developer/plugins': typeof DeveloperPluginsRoute
   '/developer/sandbox': typeof DeveloperSandboxRoute
   '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
@@ -384,10 +330,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/store'
     | '/workspace'
-    | '/admin/ai'
     | '/admin/infrastructure'
-    | '/admin/marketplace'
-    | '/admin/users'
     | '/api/chat'
     | '/auth/admin'
     | '/auth/citizen'
@@ -399,9 +342,6 @@ export interface FileRouteTypes {
     | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
-    | '/developer/events'
-    | '/developer/marketplace'
-    | '/developer/plugins'
     | '/developer/sandbox'
     | '/developer/sdk'
     | '/portal/analytics'
@@ -422,10 +362,7 @@ export interface FileRouteTypes {
     | '/'
     | '/store'
     | '/workspace'
-    | '/admin/ai'
     | '/admin/infrastructure'
-    | '/admin/marketplace'
-    | '/admin/users'
     | '/api/chat'
     | '/auth/admin'
     | '/auth/citizen'
@@ -437,9 +374,6 @@ export interface FileRouteTypes {
     | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
-    | '/developer/events'
-    | '/developer/marketplace'
-    | '/developer/plugins'
     | '/developer/sandbox'
     | '/developer/sdk'
     | '/portal/analytics'
@@ -464,10 +398,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/store'
     | '/workspace'
-    | '/admin/ai'
     | '/admin/infrastructure'
-    | '/admin/marketplace'
-    | '/admin/users'
     | '/api/chat'
     | '/auth/admin'
     | '/auth/citizen'
@@ -479,9 +410,6 @@ export interface FileRouteTypes {
     | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
-    | '/developer/events'
-    | '/developer/marketplace'
-    | '/developer/plugins'
     | '/developer/sandbox'
     | '/developer/sdk'
     | '/portal/analytics'
@@ -671,27 +599,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeveloperSandboxRouteImport
       parentRoute: typeof DeveloperRouteRoute
     }
-    '/developer/plugins': {
-      id: '/developer/plugins'
-      path: '/plugins'
-      fullPath: '/developer/plugins'
-      preLoaderRoute: typeof DeveloperPluginsRouteImport
-      parentRoute: typeof DeveloperRouteRoute
-    }
-    '/developer/marketplace': {
-      id: '/developer/marketplace'
-      path: '/marketplace'
-      fullPath: '/developer/marketplace'
-      preLoaderRoute: typeof DeveloperMarketplaceRouteImport
-      parentRoute: typeof DeveloperRouteRoute
-    }
-    '/developer/events': {
-      id: '/developer/events'
-      path: '/events'
-      fullPath: '/developer/events'
-      preLoaderRoute: typeof DeveloperEventsRouteImport
-      parentRoute: typeof DeveloperRouteRoute
-    }
     '/developer/api': {
       id: '/developer/api'
       path: '/api'
@@ -769,20 +676,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/users': {
-      id: '/admin/users'
-      path: '/users'
-      fullPath: '/admin/users'
-      preLoaderRoute: typeof AdminUsersRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/marketplace': {
-      id: '/admin/marketplace'
-      path: '/marketplace'
-      fullPath: '/admin/marketplace'
-      preLoaderRoute: typeof AdminMarketplaceRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/admin/infrastructure': {
       id: '/admin/infrastructure'
       path: '/infrastructure'
@@ -790,29 +683,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminInfrastructureRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/ai': {
-      id: '/admin/ai'
-      path: '/ai'
-      fullPath: '/admin/ai'
-      preLoaderRoute: typeof AdminAiRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
   }
 }
 
 interface AdminRouteRouteChildren {
-  AdminAiRoute: typeof AdminAiRoute
   AdminInfrastructureRoute: typeof AdminInfrastructureRoute
-  AdminMarketplaceRoute: typeof AdminMarketplaceRoute
-  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
-  AdminAiRoute: AdminAiRoute,
   AdminInfrastructureRoute: AdminInfrastructureRoute,
-  AdminMarketplaceRoute: AdminMarketplaceRoute,
-  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -843,9 +723,6 @@ const CitizenRouteRouteWithChildren = CitizenRouteRoute._addFileChildren(
 interface DeveloperRouteRouteChildren {
   DeveloperAnalyticsRoute: typeof DeveloperAnalyticsRoute
   DeveloperApiRoute: typeof DeveloperApiRoute
-  DeveloperEventsRoute: typeof DeveloperEventsRoute
-  DeveloperMarketplaceRoute: typeof DeveloperMarketplaceRoute
-  DeveloperPluginsRoute: typeof DeveloperPluginsRoute
   DeveloperSandboxRoute: typeof DeveloperSandboxRoute
   DeveloperSdkRoute: typeof DeveloperSdkRoute
   DeveloperIndexRoute: typeof DeveloperIndexRoute
@@ -854,9 +731,6 @@ interface DeveloperRouteRouteChildren {
 const DeveloperRouteRouteChildren: DeveloperRouteRouteChildren = {
   DeveloperAnalyticsRoute: DeveloperAnalyticsRoute,
   DeveloperApiRoute: DeveloperApiRoute,
-  DeveloperEventsRoute: DeveloperEventsRoute,
-  DeveloperMarketplaceRoute: DeveloperMarketplaceRoute,
-  DeveloperPluginsRoute: DeveloperPluginsRoute,
   DeveloperSandboxRoute: DeveloperSandboxRoute,
   DeveloperSdkRoute: DeveloperSdkRoute,
   DeveloperIndexRoute: DeveloperIndexRoute,
