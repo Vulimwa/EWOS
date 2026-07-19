@@ -13,6 +13,7 @@ import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as PortalRouteRouteImport } from './routes/portal/route'
 import { Route as DeveloperRouteRouteImport } from './routes/developer/route'
+import { Route as CitizenRouteRouteImport } from './routes/citizen/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal/index'
@@ -62,6 +63,11 @@ const PortalRouteRoute = PortalRouteRouteImport.update({
 const DeveloperRouteRoute = DeveloperRouteRouteImport.update({
   id: '/developer',
   path: '/developer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CitizenRouteRoute = CitizenRouteRouteImport.update({
+  id: '/citizen',
+  path: '/citizen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
@@ -218,6 +224,7 @@ const AdminAiRoute = AdminAiRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/citizen': typeof CitizenRouteRoute
   '/developer': typeof DeveloperRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
   '/store': typeof StoreRoute
@@ -253,6 +260,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/citizen': typeof CitizenRouteRoute
   '/store': typeof StoreRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/ai': typeof AdminAiRoute
@@ -288,6 +296,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/citizen': typeof CitizenRouteRoute
   '/developer': typeof DeveloperRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
   '/store': typeof StoreRoute
@@ -326,6 +335,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/citizen'
     | '/developer'
     | '/portal'
     | '/store'
@@ -361,6 +371,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/citizen'
     | '/store'
     | '/workspace'
     | '/admin/ai'
@@ -395,6 +406,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/citizen'
     | '/developer'
     | '/portal'
     | '/store'
@@ -432,6 +444,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  CitizenRouteRoute: typeof CitizenRouteRoute
   DeveloperRouteRoute: typeof DeveloperRouteRouteWithChildren
   PortalRouteRoute: typeof PortalRouteRouteWithChildren
   StoreRoute: typeof StoreRoute
@@ -472,6 +485,13 @@ declare module '@tanstack/react-router' {
       path: '/developer'
       fullPath: '/developer'
       preLoaderRoute: typeof DeveloperRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/citizen': {
+      id: '/citizen'
+      path: '/citizen'
+      fullPath: '/citizen'
+      preLoaderRoute: typeof CitizenRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -764,6 +784,7 @@ const PortalRouteRouteWithChildren = PortalRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  CitizenRouteRoute: CitizenRouteRoute,
   DeveloperRouteRoute: DeveloperRouteRouteWithChildren,
   PortalRouteRoute: PortalRouteRouteWithChildren,
   StoreRoute: StoreRoute,
