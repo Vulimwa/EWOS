@@ -31,6 +31,7 @@ import { Route as PortalAssetsRouteImport } from './routes/portal/assets'
 import { Route as PortalAnalyticsRouteImport } from './routes/portal/analytics'
 import { Route as DeveloperSdkRouteImport } from './routes/developer/sdk'
 import { Route as DeveloperSandboxRouteImport } from './routes/developer/sandbox'
+import { Route as DeveloperPluginsRouteImport } from './routes/developer/plugins'
 import { Route as DeveloperApiRouteImport } from './routes/developer/api'
 import { Route as DeveloperAnalyticsRouteImport } from './routes/developer/analytics'
 import { Route as CitizenReportRouteImport } from './routes/citizen/report'
@@ -154,6 +155,11 @@ const DeveloperSandboxRoute = DeveloperSandboxRouteImport.update({
   path: '/sandbox',
   getParentRoute: () => DeveloperRouteRoute,
 } as any)
+const DeveloperPluginsRoute = DeveloperPluginsRouteImport.update({
+  id: '/plugins',
+  path: '/plugins',
+  getParentRoute: () => DeveloperRouteRoute,
+} as any)
 const DeveloperApiRoute = DeveloperApiRouteImport.update({
   id: '/api',
   path: '/api',
@@ -235,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
+  '/developer/plugins': typeof DeveloperPluginsRoute
   '/developer/sandbox': typeof DeveloperSandboxRoute
   '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
@@ -267,6 +274,7 @@ export interface FileRoutesByTo {
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
+  '/developer/plugins': typeof DeveloperPluginsRoute
   '/developer/sandbox': typeof DeveloperSandboxRoute
   '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
@@ -304,6 +312,7 @@ export interface FileRoutesById {
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
   '/developer/api': typeof DeveloperApiRoute
+  '/developer/plugins': typeof DeveloperPluginsRoute
   '/developer/sandbox': typeof DeveloperSandboxRoute
   '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
@@ -342,6 +351,7 @@ export interface FileRouteTypes {
     | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
+    | '/developer/plugins'
     | '/developer/sandbox'
     | '/developer/sdk'
     | '/portal/analytics'
@@ -374,6 +384,7 @@ export interface FileRouteTypes {
     | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
+    | '/developer/plugins'
     | '/developer/sandbox'
     | '/developer/sdk'
     | '/portal/analytics'
@@ -410,6 +421,7 @@ export interface FileRouteTypes {
     | '/citizen/report'
     | '/developer/analytics'
     | '/developer/api'
+    | '/developer/plugins'
     | '/developer/sandbox'
     | '/developer/sdk'
     | '/portal/analytics'
@@ -599,6 +611,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeveloperSandboxRouteImport
       parentRoute: typeof DeveloperRouteRoute
     }
+    '/developer/plugins': {
+      id: '/developer/plugins'
+      path: '/plugins'
+      fullPath: '/developer/plugins'
+      preLoaderRoute: typeof DeveloperPluginsRouteImport
+      parentRoute: typeof DeveloperRouteRoute
+    }
     '/developer/api': {
       id: '/developer/api'
       path: '/api'
@@ -723,6 +742,7 @@ const CitizenRouteRouteWithChildren = CitizenRouteRoute._addFileChildren(
 interface DeveloperRouteRouteChildren {
   DeveloperAnalyticsRoute: typeof DeveloperAnalyticsRoute
   DeveloperApiRoute: typeof DeveloperApiRoute
+  DeveloperPluginsRoute: typeof DeveloperPluginsRoute
   DeveloperSandboxRoute: typeof DeveloperSandboxRoute
   DeveloperSdkRoute: typeof DeveloperSdkRoute
   DeveloperIndexRoute: typeof DeveloperIndexRoute
@@ -731,6 +751,7 @@ interface DeveloperRouteRouteChildren {
 const DeveloperRouteRouteChildren: DeveloperRouteRouteChildren = {
   DeveloperAnalyticsRoute: DeveloperAnalyticsRoute,
   DeveloperApiRoute: DeveloperApiRoute,
+  DeveloperPluginsRoute: DeveloperPluginsRoute,
   DeveloperSandboxRoute: DeveloperSandboxRoute,
   DeveloperSdkRoute: DeveloperSdkRoute,
   DeveloperIndexRoute: DeveloperIndexRoute,

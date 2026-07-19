@@ -48,7 +48,7 @@ function PluginBuilder() {
       const { error } = await supabase.from("modules").insert({
         slug: form.slug,
         name: form.name,
-        description: form.description || null,
+        description: form.description || undefined,
         version: form.version,
         category: form.category,
         icon: form.icon,
