@@ -1819,6 +1819,7 @@ export type Database = {
         | "developer"
         | "platform_admin"
         | "responder"
+        | "citizen"
     }
     CompositeTypes: {
       geometry_dump: {
@@ -1961,6 +1962,7 @@ export const Constants = {
         "developer",
         "platform_admin",
         "responder",
+        "citizen",
       ],
     },
   },
