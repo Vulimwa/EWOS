@@ -105,6 +105,78 @@ export type Database = {
           },
         ]
       }
+      citizen_reports: {
+        Row: {
+          category: string
+          contact: string | null
+          created_at: string
+          description: string | null
+          id: string
+          incident_id: string | null
+          lat: number | null
+          lng: number | null
+          location_name: string | null
+          org_id: string
+          photo_url: string | null
+          reporter_id: string
+          severity: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          contact?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          incident_id?: string | null
+          lat?: number | null
+          lng?: number | null
+          location_name?: string | null
+          org_id?: string
+          photo_url?: string | null
+          reporter_id: string
+          severity?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          contact?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          incident_id?: string | null
+          lat?: number | null
+          lng?: number | null
+          location_name?: string | null
+          org_id?: string
+          photo_url?: string | null
+          reporter_id?: string
+          severity?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "citizen_reports_incident_id_fkey"
+            columns: ["incident_id"]
+            isOneToOne: false
+            referencedRelation: "incidents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "citizen_reports_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       command_centers: {
         Row: {
           color: string | null
