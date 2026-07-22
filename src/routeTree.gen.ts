@@ -34,7 +34,6 @@ import { Route as DeveloperSandboxRouteImport } from './routes/developer/sandbox
 import { Route as DeveloperPluginsRouteImport } from './routes/developer/plugins'
 import { Route as DeveloperMarketplaceRouteImport } from './routes/developer/marketplace'
 import { Route as DeveloperEventsRouteImport } from './routes/developer/events'
-import { Route as DeveloperApiRouteImport } from './routes/developer/api'
 import { Route as DeveloperAnalyticsRouteImport } from './routes/developer/analytics'
 import { Route as CitizenReportRouteImport } from './routes/citizen/report'
 import { Route as CitizenNotificationsRouteImport } from './routes/citizen/notifications'
@@ -175,11 +174,6 @@ const DeveloperEventsRoute = DeveloperEventsRouteImport.update({
   path: '/events',
   getParentRoute: () => DeveloperRouteRoute,
 } as any)
-const DeveloperApiRoute = DeveloperApiRouteImport.update({
-  id: '/api',
-  path: '/api',
-  getParentRoute: () => DeveloperRouteRoute,
-} as any)
 const DeveloperAnalyticsRoute = DeveloperAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
@@ -273,7 +267,6 @@ export interface FileRoutesByFullPath {
   '/citizen/notifications': typeof CitizenNotificationsRoute
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
-  '/developer/api': typeof DeveloperApiRoute
   '/developer/events': typeof DeveloperEventsRoute
   '/developer/marketplace': typeof DeveloperMarketplaceRoute
   '/developer/plugins': typeof DeveloperPluginsRoute
@@ -311,7 +304,6 @@ export interface FileRoutesByTo {
   '/citizen/notifications': typeof CitizenNotificationsRoute
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
-  '/developer/api': typeof DeveloperApiRoute
   '/developer/events': typeof DeveloperEventsRoute
   '/developer/marketplace': typeof DeveloperMarketplaceRoute
   '/developer/plugins': typeof DeveloperPluginsRoute
@@ -354,7 +346,6 @@ export interface FileRoutesById {
   '/citizen/notifications': typeof CitizenNotificationsRoute
   '/citizen/report': typeof CitizenReportRoute
   '/developer/analytics': typeof DeveloperAnalyticsRoute
-  '/developer/api': typeof DeveloperApiRoute
   '/developer/events': typeof DeveloperEventsRoute
   '/developer/marketplace': typeof DeveloperMarketplaceRoute
   '/developer/plugins': typeof DeveloperPluginsRoute
@@ -398,7 +389,6 @@ export interface FileRouteTypes {
     | '/citizen/notifications'
     | '/citizen/report'
     | '/developer/analytics'
-    | '/developer/api'
     | '/developer/events'
     | '/developer/marketplace'
     | '/developer/plugins'
@@ -436,7 +426,6 @@ export interface FileRouteTypes {
     | '/citizen/notifications'
     | '/citizen/report'
     | '/developer/analytics'
-    | '/developer/api'
     | '/developer/events'
     | '/developer/marketplace'
     | '/developer/plugins'
@@ -478,7 +467,6 @@ export interface FileRouteTypes {
     | '/citizen/notifications'
     | '/citizen/report'
     | '/developer/analytics'
-    | '/developer/api'
     | '/developer/events'
     | '/developer/marketplace'
     | '/developer/plugins'
@@ -692,13 +680,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeveloperEventsRouteImport
       parentRoute: typeof DeveloperRouteRoute
     }
-    '/developer/api': {
-      id: '/developer/api'
-      path: '/api'
-      fullPath: '/developer/api'
-      preLoaderRoute: typeof DeveloperApiRouteImport
-      parentRoute: typeof DeveloperRouteRoute
-    }
     '/developer/analytics': {
       id: '/developer/analytics'
       path: '/analytics'
@@ -842,7 +823,6 @@ const CitizenRouteRouteWithChildren = CitizenRouteRoute._addFileChildren(
 
 interface DeveloperRouteRouteChildren {
   DeveloperAnalyticsRoute: typeof DeveloperAnalyticsRoute
-  DeveloperApiRoute: typeof DeveloperApiRoute
   DeveloperEventsRoute: typeof DeveloperEventsRoute
   DeveloperMarketplaceRoute: typeof DeveloperMarketplaceRoute
   DeveloperPluginsRoute: typeof DeveloperPluginsRoute
@@ -853,7 +833,6 @@ interface DeveloperRouteRouteChildren {
 
 const DeveloperRouteRouteChildren: DeveloperRouteRouteChildren = {
   DeveloperAnalyticsRoute: DeveloperAnalyticsRoute,
-  DeveloperApiRoute: DeveloperApiRoute,
   DeveloperEventsRoute: DeveloperEventsRoute,
   DeveloperMarketplaceRoute: DeveloperMarketplaceRoute,
   DeveloperPluginsRoute: DeveloperPluginsRoute,
