@@ -29,6 +29,7 @@ import { Route as PortalHierarchyRouteImport } from './routes/portal/hierarchy'
 import { Route as PortalAssistantRouteImport } from './routes/portal/assistant'
 import { Route as PortalAssetsRouteImport } from './routes/portal/assets'
 import { Route as PortalAnalyticsRouteImport } from './routes/portal/analytics'
+import { Route as DeveloperSdkRouteImport } from './routes/developer/sdk'
 import { Route as DeveloperSandboxRouteImport } from './routes/developer/sandbox'
 import { Route as DeveloperPluginsRouteImport } from './routes/developer/plugins'
 import { Route as DeveloperMarketplaceRouteImport } from './routes/developer/marketplace'
@@ -148,6 +149,11 @@ const PortalAnalyticsRoute = PortalAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
   getParentRoute: () => PortalRouteRoute,
+} as any)
+const DeveloperSdkRoute = DeveloperSdkRouteImport.update({
+  id: '/sdk',
+  path: '/sdk',
+  getParentRoute: () => DeveloperRouteRoute,
 } as any)
 const DeveloperSandboxRoute = DeveloperSandboxRouteImport.update({
   id: '/sandbox',
@@ -272,6 +278,7 @@ export interface FileRoutesByFullPath {
   '/developer/marketplace': typeof DeveloperMarketplaceRoute
   '/developer/plugins': typeof DeveloperPluginsRoute
   '/developer/sandbox': typeof DeveloperSandboxRoute
+  '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
   '/portal/assistant': typeof PortalAssistantRoute
@@ -309,6 +316,7 @@ export interface FileRoutesByTo {
   '/developer/marketplace': typeof DeveloperMarketplaceRoute
   '/developer/plugins': typeof DeveloperPluginsRoute
   '/developer/sandbox': typeof DeveloperSandboxRoute
+  '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
   '/portal/assistant': typeof PortalAssistantRoute
@@ -351,6 +359,7 @@ export interface FileRoutesById {
   '/developer/marketplace': typeof DeveloperMarketplaceRoute
   '/developer/plugins': typeof DeveloperPluginsRoute
   '/developer/sandbox': typeof DeveloperSandboxRoute
+  '/developer/sdk': typeof DeveloperSdkRoute
   '/portal/analytics': typeof PortalAnalyticsRoute
   '/portal/assets': typeof PortalAssetsRoute
   '/portal/assistant': typeof PortalAssistantRoute
@@ -394,6 +403,7 @@ export interface FileRouteTypes {
     | '/developer/marketplace'
     | '/developer/plugins'
     | '/developer/sandbox'
+    | '/developer/sdk'
     | '/portal/analytics'
     | '/portal/assets'
     | '/portal/assistant'
@@ -431,6 +441,7 @@ export interface FileRouteTypes {
     | '/developer/marketplace'
     | '/developer/plugins'
     | '/developer/sandbox'
+    | '/developer/sdk'
     | '/portal/analytics'
     | '/portal/assets'
     | '/portal/assistant'
@@ -472,6 +483,7 @@ export interface FileRouteTypes {
     | '/developer/marketplace'
     | '/developer/plugins'
     | '/developer/sandbox'
+    | '/developer/sdk'
     | '/portal/analytics'
     | '/portal/assets'
     | '/portal/assistant'
@@ -644,6 +656,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/analytics'
       preLoaderRoute: typeof PortalAnalyticsRouteImport
       parentRoute: typeof PortalRouteRoute
+    }
+    '/developer/sdk': {
+      id: '/developer/sdk'
+      path: '/sdk'
+      fullPath: '/developer/sdk'
+      preLoaderRoute: typeof DeveloperSdkRouteImport
+      parentRoute: typeof DeveloperRouteRoute
     }
     '/developer/sandbox': {
       id: '/developer/sandbox'
@@ -828,6 +847,7 @@ interface DeveloperRouteRouteChildren {
   DeveloperMarketplaceRoute: typeof DeveloperMarketplaceRoute
   DeveloperPluginsRoute: typeof DeveloperPluginsRoute
   DeveloperSandboxRoute: typeof DeveloperSandboxRoute
+  DeveloperSdkRoute: typeof DeveloperSdkRoute
   DeveloperIndexRoute: typeof DeveloperIndexRoute
 }
 
@@ -838,6 +858,7 @@ const DeveloperRouteRouteChildren: DeveloperRouteRouteChildren = {
   DeveloperMarketplaceRoute: DeveloperMarketplaceRoute,
   DeveloperPluginsRoute: DeveloperPluginsRoute,
   DeveloperSandboxRoute: DeveloperSandboxRoute,
+  DeveloperSdkRoute: DeveloperSdkRoute,
   DeveloperIndexRoute: DeveloperIndexRoute,
 }
 
