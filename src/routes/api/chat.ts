@@ -25,6 +25,7 @@ export const Route = createFileRoute("/api/chat")({
           messages: UIMessage[];
           mode?: "explain" | "act";
           scope?: string;
+          audience?: "operator" | "citizen";
         };
 
         // Live situational context: latest events for the active org
@@ -47,7 +48,8 @@ export const Route = createFileRoute("/api/chat")({
         }
 
         const mode = body.mode === "act" ? "act" : "explain";
-        const system = [
+        const audience = body.audience === "citizen" ? "citizen" : "operator";
+        const operatorSystem = [
           "You are the EWOS AI Decision Assistant inside an early-warning operations workspace (region: Lake Victoria Basin / Nzoia River, Kenya).",
           "Audience: emergency operations officers. Be terse, structured, and operational. Use short bullet lists. Reference event severity levels (advisory < watch < warning < emergency).",
           mode === "act"
@@ -58,6 +60,14 @@ export const Route = createFileRoute("/api/chat")({
         ]
           .filter(Boolean)
           .join("\n");
+        const citizenSystem = [
+          "You are the EWOS Community Safety Assistant. Audience: members of the public in the Lake Victoria Basin / Nzoia River area, Kenya.",
+          "Speak plainly and calmly in short sentences. Avoid jargon. Prioritise personal safety, family preparedness, evacuation routes, and how to report hazards.",
+          "If the live feed shows a warning or emergency near the user, lead with the safety action. Never invent hazards not in the feed.",
+          "Do NOT draft official alert messages or command-and-control actions — that is for operators.",
+          `Live public hazard feed (most recent first, JSON): ${contextBlock}`,
+        ].join("\n");
+        const system = audience === "citizen" ? citizenSystem : operatorSystem;
 
         const initialRunId = getLovableAiGatewayRunId(request);
         const gateway = createLovableAiGatewayProvider(lovableApiKey, initialRunId);
