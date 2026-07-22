@@ -16,7 +16,7 @@ function DevAnalytics() {
     queryKey: ["dev-analytics-modules", user?.id],
     enabled: !!user?.id,
     queryFn: async () => {
-      const { data, error } = await supabase.from("modules").select("id,slug,name,status,event_topics,installs_count").eq("publisher_id", user!.id);
+      const { data, error } = await supabase.from("modules").select("id,slug,name,status,event_topics").eq("publisher_id", user!.id);
       if (error) throw error;
       return data;
     },
@@ -27,6 +27,19 @@ function DevAnalytics() {
     for (const m of myModules ?? []) for (const t of (m.event_topics as string[] | null) ?? []) set.add(t);
     return [...set];
   }, [myModules]);
+
+  const moduleIds = (myModules ?? []).map((m) => m.id);
+  const { data: installs } = useQuery({
+    queryKey: ["dev-analytics-installs", moduleIds.sort().join(",")],
+    enabled: moduleIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("module_installs").select("module_id").in("module_id", moduleIds);
+      if (error) throw error;
+      return data;
+    },
+  });
+  const installsByModule = new Map<string, number>();
+  for (const i of installs ?? []) installsByModule.set(i.module_id, (installsByModule.get(i.module_id) ?? 0) + 1);
 
   const { data: events } = useQuery({
     queryKey: ["dev-analytics-events", topics.sort().join(",")],
@@ -54,11 +67,11 @@ function DevAnalytics() {
       const day = new Date(e.occurred_at).toISOString().slice(0, 10);
       byDay.set(day, (byDay.get(day) ?? 0) + 1);
     }
-    const totalInstalls = (myModules ?? []).reduce((n, m) => n + (m.installs_count ?? 0), 0);
+    const totalInstalls = installs?.length ?? 0;
     const days = [...byDay.entries()].sort();
     const peak = Math.max(1, ...days.map(([, n]) => n));
     return { bySeverity, byTopic: [...byTopic.entries()].sort((a, b) => b[1] - a[1]), days, peak, totalInstalls, totalEvents: events?.length ?? 0 };
-  }, [events, myModules]);
+  }, [events, installs]);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-6">
@@ -132,7 +145,7 @@ function DevAnalytics() {
                 <p className="truncate font-medium">{m.name}</p>
                 <p className="truncate text-xs text-muted-foreground">{m.slug} · {m.status}</p>
               </div>
-              <span className="text-xs tabular-nums text-muted-foreground">{m.installs_count ?? 0} installs</span>
+              <span className="text-xs tabular-nums text-muted-foreground">{installsByModule.get(m.id) ?? 0} installs</span>
             </li>
           ))}
           {!(myModules ?? []).length && <li className="px-4 py-8 text-center text-xs text-muted-foreground">No plugins yet. Create one in the Plugin Builder.</li>}

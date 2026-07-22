@@ -80,7 +80,7 @@ function DevMarketplace() {
               <li key={m.id} className="flex items-center gap-3 px-4 py-3 text-sm">
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium">{m.name}</p>
-                  <p className="truncate text-xs text-muted-foreground">v{m.version} · {m.category} · {m.installs_count ?? 0} installs</p>
+                  <p className="truncate text-xs text-muted-foreground">v{m.version} · {m.category}</p>
                 </div>
                 <span className={cn("rounded border px-1.5 py-0.5 text-[10px] uppercase tracking-wider", STATUS_STYLES[status])}>{status}</span>
                 {status === "draft" && (
