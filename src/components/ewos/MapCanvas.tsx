@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { GeoJSONSource, Map as MapLibreMap, MapLayerMouseEvent } from "maplibre-gl";
 import type { Geometry } from "geojson";
-import { Layers, Satellite, MoonStar } from "lucide-react";
+import { Layers, Map as MapIcon, Mountain } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { EwosEventRow } from "@/sdk/event-bus";
 
@@ -42,47 +43,106 @@ const SEVERITY_COLORS: Record<string, string> = {
   emergency: "#e5484d",
 };
 
-type MapTilerWindow = Window & {
-  __EWOS_MAP_TILER_API_KEY__?: string;
+type BasemapId = "street" | "humanitarian";
+
+const BASEMAP_LABELS: Record<BasemapId, string> = {
+  street: "OpenStreetMap",
+  humanitarian: "OpenStreetMap Humanitarian",
 };
 
-const MAPTILER_STYLE_IDS = {
-  dark: "darkmatter",
-  satellite: "satellite",
-} as const;
-
-function getMapTilerApiKey(): string | undefined {
-  if (typeof window === "undefined") return undefined;
-  return (window as MapTilerWindow).__EWOS_MAP_TILER_API_KEY__?.trim() || undefined;
-}
-
-function getMapStyle(basemap: "dark" | "satellite") {
-  const mapTilerApiKey = getMapTilerApiKey();
-  if (mapTilerApiKey) {
-    return `https://api.maptiler.com/maps/${MAPTILER_STYLE_IDS[basemap]}/style.json?key=${encodeURIComponent(mapTilerApiKey)}`;
-  }
-
+function getMapStyle(activeBasemap: BasemapId) {
   return {
     version: 8,
     sources: {
-      "basemap-dark": {
+      street: {
         type: "raster",
-        tiles: ["https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png"],
+        tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
         tileSize: 256,
-        attribution: "© OpenStreetMap contributors © CARTO",
+        attribution: "© OpenStreetMap contributors",
       },
-      "basemap-sat": {
+      humanitarian: {
         type: "raster",
-        tiles: [
-          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        ],
+        tiles: ["https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"],
         tileSize: 256,
-        attribution: "© Esri World Imagery",
+        attribution: "© OpenStreetMap contributors",
       },
+      boundaries: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
+      alerts: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
+      gauges: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
     },
     layers: [
-      { id: "basemap-dark", type: "raster", source: "basemap-dark" },
-      { id: "basemap-sat", type: "raster", source: "basemap-sat", layout: { visibility: "none" } },
+      {
+        id: "street",
+        type: "raster",
+        source: "street",
+        layout: { visibility: activeBasemap === "street" ? "visible" : "none" },
+      },
+      {
+        id: "humanitarian",
+        type: "raster",
+        source: "humanitarian",
+        layout: { visibility: activeBasemap === "humanitarian" ? "visible" : "none" },
+      },
+      {
+        id: "boundaries-line",
+        type: "line",
+        source: "boundaries",
+        paint: {
+          "line-color": "#4cc9d4",
+          "line-width": 1.4,
+          "line-dasharray": [3, 2],
+          "line-opacity": 0.8,
+        },
+      },
+      {
+        id: "alerts-fill",
+        type: "fill",
+        source: "alerts",
+        paint: {
+          "fill-color": [
+            "match",
+            ["get", "severity"],
+            "emergency",
+            SEVERITY_COLORS.emergency,
+            "warning",
+            SEVERITY_COLORS.warning,
+            "watch",
+            SEVERITY_COLORS.watch,
+            SEVERITY_COLORS.advisory,
+          ],
+          "fill-opacity": 0.28,
+        },
+      },
+      {
+        id: "alerts-line",
+        type: "line",
+        source: "alerts",
+        paint: {
+          "line-color": [
+            "match",
+            ["get", "severity"],
+            "emergency",
+            SEVERITY_COLORS.emergency,
+            "warning",
+            SEVERITY_COLORS.warning,
+            "watch",
+            SEVERITY_COLORS.watch,
+            SEVERITY_COLORS.advisory,
+          ],
+          "line-width": 1.6,
+        },
+      },
+      {
+        id: "gauges-circle",
+        type: "circle",
+        source: "gauges",
+        paint: {
+          "circle-radius": 6,
+          "circle-color": "#4cc9d4",
+          "circle-stroke-color": "#0d1420",
+          "circle-stroke-width": 2,
+        },
+      },
     ],
   } as const;
 }
@@ -117,19 +177,17 @@ export function MapCanvas({
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [ready, setReady] = useState(false);
-  const [basemap, setBasemap] = useState<"dark" | "satellite">("dark");
+  const [basemap, setBasemap] = useState<BasemapId>("street");
   const [opacity, setOpacity] = useState(0.7);
   const [layersOpen, setLayersOpen] = useState(false);
-  const [styleVersion, setStyleVersion] = useState(0);
   const selectRef = useRef(onSelectEvent);
   selectRef.current = onSelectEvent;
-  const lastAppliedStyleRef = useRef<string | null>(null);
 
   const clickHandlerRef = useRef<((e: MapLayerMouseEvent) => void) | null>(null);
   const enterHandlerRef = useRef<(() => void) | null>(null);
   const leaveHandlerRef = useRef<(() => void) | null>(null);
 
-  const ensureOverlayLayers = (map: MapLibreMap) => {
+  const ensureSourcesAndLayers = (map: MapLibreMap) => {
     if (!map.getSource("boundaries")) {
       map.addSource("boundaries", {
         type: "geojson",
@@ -149,93 +207,76 @@ export function MapCanvas({
       });
     }
 
-    if (!map.getLayer("boundaries-line")) {
-      map.addLayer({
-        id: "boundaries-line",
-        type: "line",
-        source: "boundaries",
-        paint: {
-          "line-color": "#4cc9d4",
-          "line-width": 1.4,
-          "line-dasharray": [3, 2],
-          "line-opacity": 0.8,
-        },
-      });
-    }
-    if (!map.getLayer("alerts-fill")) {
-      map.addLayer({
-        id: "alerts-fill",
-        type: "fill",
-        source: "alerts",
-        paint: {
-          "fill-color": [
-            "match",
-            ["get", "severity"],
-            "emergency",
-            SEVERITY_COLORS.emergency,
-            "warning",
-            SEVERITY_COLORS.warning,
-            "watch",
-            SEVERITY_COLORS.watch,
-            SEVERITY_COLORS.advisory,
-          ],
-          "fill-opacity": 0.28,
-        },
-      });
-    }
-    if (!map.getLayer("alerts-line")) {
-      map.addLayer({
-        id: "alerts-line",
-        type: "line",
-        source: "alerts",
-        paint: {
-          "line-color": [
-            "match",
-            ["get", "severity"],
-            "emergency",
-            SEVERITY_COLORS.emergency,
-            "warning",
-            SEVERITY_COLORS.warning,
-            "watch",
-            SEVERITY_COLORS.watch,
-            SEVERITY_COLORS.advisory,
-          ],
-          "line-width": 1.6,
-        },
-      });
-    }
-    if (!map.getLayer("gauges-circle")) {
-      map.addLayer({
-        id: "gauges-circle",
-        type: "circle",
-        source: "gauges",
-        paint: {
-          "circle-radius": 6,
-          "circle-color": "#4cc9d4",
-          "circle-stroke-color": "#0d1420",
-          "circle-stroke-width": 2,
-        },
-      });
-    }
-  };
+    const ensureLayer = (layer: Parameters<MapLibreMap["addLayer"]>[0]) => {
+      if (!map.getLayer(layer.id)) {
+        map.addLayer(layer);
+      }
+    };
 
-  const removeOverlayInteractions = (map: MapLibreMap) => {
-    if (clickHandlerRef.current) {
-      map.off("click", "alerts-fill", clickHandlerRef.current);
-      clickHandlerRef.current = null;
-    }
-    if (enterHandlerRef.current) {
-      map.off("mouseenter", "alerts-fill", enterHandlerRef.current);
-      enterHandlerRef.current = null;
-    }
-    if (leaveHandlerRef.current) {
-      map.off("mouseleave", "alerts-fill", leaveHandlerRef.current);
-      leaveHandlerRef.current = null;
-    }
-  };
+    ensureLayer({
+      id: "boundaries-line",
+      type: "line",
+      source: "boundaries",
+      paint: {
+        "line-color": "#4cc9d4",
+        "line-width": 1.4,
+        "line-dasharray": [3, 2],
+        "line-opacity": 0.8,
+      },
+    });
+    ensureLayer({
+      id: "alerts-fill",
+      type: "fill",
+      source: "alerts",
+      paint: {
+        "fill-color": [
+          "match",
+          ["get", "severity"],
+          "emergency",
+          SEVERITY_COLORS.emergency,
+          "warning",
+          SEVERITY_COLORS.warning,
+          "watch",
+          SEVERITY_COLORS.watch,
+          SEVERITY_COLORS.advisory,
+        ],
+        "fill-opacity": 0.28,
+      },
+    });
+    ensureLayer({
+      id: "alerts-line",
+      type: "line",
+      source: "alerts",
+      paint: {
+        "line-color": [
+          "match",
+          ["get", "severity"],
+          "emergency",
+          SEVERITY_COLORS.emergency,
+          "warning",
+          SEVERITY_COLORS.warning,
+          "watch",
+          SEVERITY_COLORS.watch,
+          SEVERITY_COLORS.advisory,
+        ],
+        "line-width": 1.6,
+      },
+    });
+    ensureLayer({
+      id: "gauges-circle",
+      type: "circle",
+      source: "gauges",
+      paint: {
+        "circle-radius": 6,
+        "circle-color": "#4cc9d4",
+        "circle-stroke-color": "#0d1420",
+        "circle-stroke-width": 2,
+      },
+    });
 
-  const attachOverlayInteractions = (map: MapLibreMap) => {
-    removeOverlayInteractions(map);
+    if (clickHandlerRef.current) map.off("click", "alerts-fill", clickHandlerRef.current);
+    if (enterHandlerRef.current) map.off("mouseenter", "alerts-fill", enterHandlerRef.current);
+    if (leaveHandlerRef.current) map.off("mouseleave", "alerts-fill", leaveHandlerRef.current);
 
     const clickHandler = (e: MapLayerMouseEvent) => {
       const id = e.features?.[0]?.properties?.id as string | undefined;
@@ -257,40 +298,33 @@ export function MapCanvas({
     map.on("mouseleave", "alerts-fill", leaveHandler);
   };
 
-  const getStyleSignature = (nextBasemap: "dark" | "satellite", hasMapTilerKey: boolean) =>
-    `${hasMapTilerKey ? "maptiler" : "fallback"}:${nextBasemap}`;
-
   // Init map once (client only)
   useEffect(() => {
     let cancelled = false;
     let map: MapLibreMap | undefined;
+
     (async () => {
       const maplibregl = (await import("maplibre-gl")).default;
       await import("maplibre-gl/dist/maplibre-gl.css");
       if (cancelled || !containerRef.current) return;
-      lastAppliedStyleRef.current = getStyleSignature("dark", Boolean(getMapTilerApiKey()));
+
       map = new maplibregl.Map({
         container: containerRef.current,
         center,
         zoom,
         attributionControl: { compact: true },
-        style: getMapStyle("dark"),
+        style: getMapStyle("street"),
       });
+
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-left");
-      const handleStyleLoad = () => {
+      map.on("load", () => {
         if (!map) return;
         mapRef.current = map;
-        ensureOverlayLayers(map);
-        attachOverlayInteractions(map);
-        setStyleVersion((value) => value + 1);
+        ensureSourcesAndLayers(map);
         setReady(true);
-      };
-      map.on("style.load", handleStyleLoad);
-      map.on("remove", () => {
-        if (!map) return;
-        removeOverlayInteractions(map);
       });
     })();
+
     return () => {
       cancelled = true;
       map?.remove();
@@ -299,11 +333,13 @@ export function MapCanvas({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Sync data sources
+  // Sync data sources.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready) return;
-    ensureOverlayLayers(map);
+
+    ensureSourcesAndLayers(map);
+
     const alertFeatures = events
       .filter((e) => e.geom_geojson)
       .map((e) => ({
@@ -311,6 +347,7 @@ export function MapCanvas({
         geometry: e.geom_geojson as Geometry,
         properties: { id: e.id, severity: e.severity, topic: e.topic },
       }));
+
     (map.getSource("alerts") as GeoJSONSource | undefined)?.setData({
       type: "FeatureCollection",
       features: alertFeatures,
@@ -331,19 +368,21 @@ export function MapCanvas({
         properties: { name: g.name },
       })),
     });
-  }, [events, boundaries, gauges, ready, styleVersion]);
+  }, [events, boundaries, gauges, ready]);
 
   // Sync basemap selection.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready) return;
-    const nextSignature = getStyleSignature(basemap, Boolean(getMapTilerApiKey()));
-    if (lastAppliedStyleRef.current === nextSignature) return;
-    lastAppliedStyleRef.current = nextSignature;
-    map.setStyle(getMapStyle(basemap));
+    map.setLayoutProperty("street", "visibility", basemap === "street" ? "visible" : "none");
+    map.setLayoutProperty(
+      "humanitarian",
+      "visibility",
+      basemap === "humanitarian" ? "visible" : "none",
+    );
   }, [basemap, ready]);
 
-  // Sync overlay visibility + opacity after the style has loaded.
+  // Sync overlay visibility + opacity.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready) return;
@@ -361,9 +400,9 @@ export function MapCanvas({
     map.setLayoutProperty("gauges-circle", "visibility", layers.gauges ? "visible" : "none");
     map.setPaintProperty("alerts-fill", "fill-opacity", 0.4 * opacity);
     map.setPaintProperty("alerts-line", "line-opacity", Math.min(1, opacity + 0.2));
-  }, [layers, opacity, ready, styleVersion]);
+  }, [layers, opacity, ready]);
 
-  // Focus selected event
+  // Focus selected event.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready || !focusEventId) return;
@@ -382,34 +421,33 @@ export function MapCanvas({
         aria-label="Hazard situation map"
       />
 
-      {/* Map toolbar */}
       <div className="absolute right-3 top-3 z-10 flex flex-col items-end gap-1.5">
         <div className="panel-elevated flex items-center gap-0.5 rounded-md border border-border p-0.5">
           <button
-            onClick={() => setBasemap("dark")}
-            aria-pressed={basemap === "dark"}
-            title="Dark basemap"
+            onClick={() => setBasemap("street")}
+            aria-pressed={basemap === "street"}
+            title={BASEMAP_LABELS.street}
             className={cn(
               "rounded-sm p-1.5 transition-colors",
-              basemap === "dark"
+              basemap === "street"
                 ? "bg-primary/20 text-primary"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
-            <MoonStar className="size-3.5" />
+            <MapIcon className="size-3.5" />
           </button>
           <button
-            onClick={() => setBasemap("satellite")}
-            aria-pressed={basemap === "satellite"}
-            title="Satellite basemap"
+            onClick={() => setBasemap("humanitarian")}
+            aria-pressed={basemap === "humanitarian"}
+            title={BASEMAP_LABELS.humanitarian}
             className={cn(
               "rounded-sm p-1.5 transition-colors",
-              basemap === "satellite"
+              basemap === "humanitarian"
                 ? "bg-primary/20 text-primary"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
-            <Satellite className="size-3.5" />
+            <Mountain className="size-3.5" />
           </button>
           <button
             onClick={() => setLayersOpen((v) => !v)}

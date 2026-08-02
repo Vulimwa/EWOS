@@ -115,18 +115,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
-  const mapTilerApiKey = process.env.MAP_TILER_API_KEY?.trim();
   return (
     <html lang="en">
       <head>
         <HeadContent />
-        {mapTilerApiKey ? (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.__EWOS_MAP_TILER_API_KEY__ = ${JSON.stringify(mapTilerApiKey)};`,
-            }}
-          />
-        ) : null}
       </head>
       <body>
         {children}
