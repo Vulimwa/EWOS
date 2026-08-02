@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useEffect, useRef, useState } from "react";
 import type { GeoJSONSource, Map as MapLibreMap, MapLayerMouseEvent } from "maplibre-gl";
 import type { Geometry } from "geojson";
 import { Layers, Map as MapIcon, Mountain } from "lucide-react";
