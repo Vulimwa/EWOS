@@ -136,19 +136,20 @@ EWOS is built around chained hazard intelligence.
 
 Example workflow:
 
-Drought Index
+1. Drought Index
+2. Vegetation Stress
+3. Wildfire Risk
+4. Agriculture Impact
+5. Food Security Risk
+6. Community Alert
+7. Response Planning
 
-Vegetation Stress
+Example propagation across modules:
 
-Wildfire Risk
-
-Agriculture Impact
-
-Food Security Risk
-
-Community Alert
-
-Response Planning
+- Drought Module publishes `VegetationStressHigh`.
+- Wildfire Module receives the signal and updates wildfire risk.
+- Agriculture Module receives the signal and updates crop stress.
+- Community Alert Module receives the signal and generates a warning.
 
 This model lets hazards become connected instead of isolated.
 
@@ -162,39 +163,29 @@ The AI assistant summarizes the relevant installed modules into one report.
 
 ## Marketplace Workflow
 
-Developer
-
-Builds Plugin
-
-Publishes Capability
-
-EWOS Reviews
-
-Marketplace
-
-Organization Installs
-
-Immediately Available
+1. Developer
+2. Builds Plugin
+3. Publishes Capability
+4. EWOS Reviews
+5. Marketplace
+6. Organization Installs
+7. Immediately Available
 
 ## User Journey
 
-County Disaster Officer
+1. County Disaster Officer
+2. Login
+3. Browse Capability Store
+4. Install Flood Module
+5. Install Wildfire Module
+6. Configure Notifications
+7. Monitor Dashboard
+8. Receive AI Insights
+9. Coordinate Response
 
-Login
+## Vision Statement
 
-Browse Capability Store
-
-Install Flood Module
-
-Install Wildfire Module
-
-Configure Notifications
-
-Monitor Dashboard
-
-Receive AI Insights
-
-Coordinate Response
+EWOS transforms fragmented environmental intelligence into an open, interoperable ecosystem where governments, developers, researchers, and communities collaborate through modular capabilities, shared infrastructure, and event-driven intelligence to build a more resilient future.
 
 ## Functional Requirements
 
