@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PORTALS, type PortalId } from "@/lib/portals";
 
-const DEMO_EMAIL = "bravinvulimwa84@gmail.com";
+const DEMO_EMAIL = "vulimwabravin@gmail.com";
 const DEMO_PASSWORD = "Code4Cities1.";
 
 interface AuthCardProps {

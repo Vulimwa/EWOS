@@ -415,7 +415,7 @@ export function MapCanvas({
     <div className="relative h-full w-full overflow-hidden bg-background">
       <div
         ref={containerRef}
-        className="absolute inset-0"
+        className="!absolute !inset-0 h-full w-full"
         role="application"
         aria-label="Hazard situation map"
       />

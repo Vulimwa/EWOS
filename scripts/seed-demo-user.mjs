@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-const DEMO_EMAIL = "bravinvulimwa84@gmail.com";
+const DEMO_EMAIL = "vulimwabravin@gmail.com";
 const DEMO_PASSWORD = "Code4Cities1.";
 const DEMO_ORG_ID = "00000000-0000-4000-8000-000000000001";
 const DEMO_ROLES = [
