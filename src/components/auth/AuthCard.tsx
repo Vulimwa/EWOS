@@ -10,6 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PORTALS, type PortalId } from "@/lib/portals";
 
+const DEMO_EMAIL = "bravinvulimwa84@gmail.com";
+const DEMO_PASSWORD = "Code4Cities1";
+
 interface AuthCardProps {
   portalId: PortalId;
 }
@@ -19,8 +22,8 @@ export function AuthCard({ portalId }: AuthCardProps) {
   const navigate = useNavigate();
   const { session, loading } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(DEMO_EMAIL);
+  const [password, setPassword] = useState(DEMO_PASSWORD);
   const [busy, setBusy] = useState(false);
 
   if (!loading && session) {
@@ -32,6 +35,17 @@ export function AuthCard({ portalId }: AuthCardProps) {
     setBusy(true);
     try {
       if (mode === "signup") {
+        if (email.toLowerCase() === DEMO_EMAIL) {
+          const { error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (!signInError) {
+            toast.success("Signed in with demo account");
+            void navigate({ to: portal.home });
+            return;
+          }
+        }
         if (!portal.allowSignup) throw new Error("Sign-up is invite-only for this portal.");
         const { error } = await supabase.auth.signUp({
           email,
@@ -75,14 +89,19 @@ export function AuthCard({ portalId }: AuthCardProps) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <Toaster theme="dark" />
       <div className="w-full max-w-sm">
-        <Link to="/" className="mb-4 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+        <Link
+          to="/"
+          className="mb-4 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+        >
           <ArrowLeft className="size-3" /> All portals
         </Link>
         <div className="mb-6 flex items-center justify-center gap-2">
           <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <Radar className="size-4" />
           </span>
-          <span className="text-data text-sm font-semibold tracking-widest text-foreground">EWOS</span>
+          <span className="text-data text-sm font-semibold tracking-widest text-foreground">
+            EWOS
+          </span>
         </div>
 
         <div className="rounded-lg border border-border bg-card p-6 shadow-lg">
@@ -96,23 +115,45 @@ export function AuthCard({ portalId }: AuthCardProps) {
             {mode === "signin" ? "Sign in" : "Create account"}
           </h1>
           <p className="mt-1 text-xs text-muted-foreground">{portal.tagline}</p>
+          <p className="mt-3 rounded-md border border-border bg-secondary/50 px-3 py-2 text-[11px] text-muted-foreground">
+            Demo access: {DEMO_EMAIL} / {DEMO_PASSWORD}
+          </p>
 
           <Button onClick={google} disabled={busy} variant="outline" className="mt-5 w-full">
             Continue with Google
           </Button>
 
           <div className="my-4 flex items-center gap-2 text-[10px] uppercase tracking-widest text-muted-foreground">
-            <div className="h-px flex-1 bg-border" />or<div className="h-px flex-1 bg-border" />
+            <div className="h-px flex-1 bg-border" />
+            or
+            <div className="h-px flex-1 bg-border" />
           </div>
 
           <form onSubmit={submit} className="space-y-3">
             <div className="space-y-1">
-              <Label htmlFor="email" className="text-xs">Email</Label>
-              <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Label htmlFor="email" className="text-xs">
+                Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="password" className="text-xs">Password</Label>
-              <Input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} />
+              <Label htmlFor="password" className="text-xs">
+                Password
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
             <Button type="submit" disabled={busy} className="w-full">
               {mode === "signin" ? "Sign in" : "Create account"}
