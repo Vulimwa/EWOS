@@ -1,6 +1,4 @@
-# EWOS
-
-Early Warning Operating System.
+# EWOS-Early Warning Operating System.
 Shopify unified commerce. ClickUp unified work. M-Pesa unified digital services. EWOS unifies early warning systems. One platform. Many warning systems. Connected intelligence.
 
 EWOS is an open, modular platform for multi-hazard environmental intelligence. It turns fragmented warning systems into installable HazardApps that can be connected, managed, and operated from a single workspace.
